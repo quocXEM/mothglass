@@ -40,13 +40,13 @@ color = Color(1, 0.88, 0.55, 0.14)
 polygon = PackedVector2Array(-70, 0, -35, -60, 35, -60, 70, 0, 35, 60, -35, 60)
 
 [node name="LampHint" type="Label" parent="World/Lamp"]
-offset_left = -48.0
+offset_left = -40.0
 offset_top = 52.0
-offset_right = 48.0
-offset_bottom = 74.0
-theme_override_colors/font_color = Color(0.92, 0.88, 0.8, 0.7)
-theme_override_font_sizes/font_size = 13
-text = "drag"
+offset_right = 40.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.8, 0.55)
+theme_override_font_sizes/font_size = 12
+text = ""
 horizontal_alignment = 1
 
 [node name="Vignette" type="Sprite2D" parent="World"]
@@ -55,62 +55,47 @@ z_index = 8
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Top" type="HBoxContainer" parent="UI"]
-offset_left = 20.0
-offset_top = 16.0
+offset_left = 24.0
+offset_top = 20.0
 offset_right = 280.0
 offset_bottom = 52.0
-theme_override_constants/separation = 8
+theme_override_constants/separation = 12
 
 [node name="BtnBack" type="Button" parent="UI/Top"]
-custom_minimum_size = Vector2(88, 34)
+custom_minimum_size = Vector2(72, 32)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "Menu"
 
 [node name="BtnRetry" type="Button" parent="UI/Top"]
-custom_minimum_size = Vector2(88, 34)
+custom_minimum_size = Vector2(72, 32)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "Again"
 
 [node name="Title" type="Label" parent="UI"]
 anchors_preset = 10
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -200.0
-offset_top = 12.0
-offset_right = 200.0
-offset_bottom = 44.0
-theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 0.92)
-theme_override_font_sizes/font_size = 26
+offset_left = -220.0
+offset_top = 18.0
+offset_right = 220.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.96, 0.93, 0.88, 0.95)
+theme_override_font_sizes/font_size = 28
 text = "Mothglass"
 horizontal_alignment = 1
-
-[node name="RuleBar" type="Label" parent="UI"]
-unique_name_in_owner = true
-anchors_preset = 10
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -420.0
-offset_top = 46.0
-offset_right = 420.0
-offset_bottom = 72.0
-theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 0.9)
-theme_override_font_sizes/font_size = 14
-text = "GOAL: Cover the glowing dots with the object's shadow."
-horizontal_alignment = 1
-autowrap_mode = 2
 
 [node name="Badge" type="Label" parent="UI"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -120.0
-offset_top = 16.0
-offset_right = -24.0
-offset_bottom = 42.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.55)
-theme_override_font_sizes/font_size = 13
+offset_left = -80.0
+offset_top = 22.0
+offset_right = -28.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.45)
+theme_override_font_sizes/font_size = 14
 text = "I"
 horizontal_alignment = 2
 
@@ -119,46 +104,14 @@ visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -160.0
-offset_top = 42.0
-offset_right = -24.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.4)
+offset_left = -100.0
+offset_top = 48.0
+offset_right = -28.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.35)
 theme_override_font_sizes/font_size = 12
 text = "Q  E"
 horizontal_alignment = 2
-
-[node name="Legend" type="HBoxContainer" parent="UI"]
-unique_name_in_owner = true
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -40.0
-offset_right = 520.0
-offset_bottom = -14.0
-theme_override_constants/separation = 16
-
-[node name="LegLamp" type="Label" parent="UI/Legend"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
-theme_override_font_sizes/font_size = 12
-text = "Lamp (drag)"
-
-[node name="LegObj" type="Label" parent="UI/Legend"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
-theme_override_font_sizes/font_size = 12
-text = "Object"
-
-[node name="LegDot" type="Label" parent="UI/Legend"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
-theme_override_font_sizes/font_size = 12
-text = "Dots"
 
 [node name="Whisper" type="Label" parent="UI"]
 anchors_preset = 7
@@ -166,48 +119,41 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -360.0
-offset_top = -78.0
-offset_right = 360.0
-offset_bottom = -48.0
-theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 0.85)
-theme_override_font_sizes/font_size = 15
+offset_left = -280.0
+offset_top = -56.0
+offset_right = 280.0
+offset_bottom = -32.0
+theme_override_colors/font_color = Color(0.94, 0.9, 0.84, 0.55)
+theme_override_font_sizes/font_size = 14
 text = ""
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="ProgressLabel" type="Label" parent="UI"]
-visible = false
+[node name="InkTrack" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -80.0
-offset_top = -44.0
-offset_right = 80.0
-offset_bottom = -28.0
-horizontal_alignment = 1
+offset_left = -64.0
+offset_top = -22.0
+offset_right = 64.0
+offset_bottom = -20.0
+color = Color(0.95, 0.9, 0.82, 0.12)
 
-[node name="Progress" type="ProgressBar" parent="UI"]
+[node name="InkFill" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -28.0
-offset_right = 90.0
-offset_bottom = -22.0
-max_value = 100.0
-show_percentage = false
-
-[node name="HowTo" type="PanelContainer" parent="UI"]
-visible = false
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -64.0
+offset_top = -22.0
+offset_right = -64.0
+offset_bottom = -20.0
+color = Color(0.95, 0.9, 0.82, 0.55)
 
 [node name="Win" type="PanelContainer" parent="UI"]
 visible = false
@@ -216,10 +162,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -90.0
-offset_right = 160.0
-offset_bottom = 90.0
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
 
 [node name="VBox" type="VBoxContainer" parent="UI/Win"]
 layout_mode = 2
@@ -228,14 +174,14 @@ alignment = 1
 
 [node name="WinTitle" type="Label" parent="UI/Win/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "Remembered"
 horizontal_alignment = 1
 
 [node name="WinBody" type="Label" parent="UI/Win/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.3, 0.26, 0.22, 0.85)
+theme_override_colors/font_color = Color(0.3, 0.26, 0.22, 0.8)
 text = "The shadow holds."
 horizontal_alignment = 1
 
@@ -255,10 +201,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -80.0
-offset_right = 140.0
-offset_bottom = 80.0
+offset_left = -130.0
+offset_top = -70.0
+offset_right = 130.0
+offset_bottom = 70.0
 
 [node name="VBox" type="VBoxContainer" parent="UI/Pause"]
 layout_mode = 2
@@ -267,7 +213,7 @@ alignment = 1
 
 [node name="PauseTitle" type="Label" parent="UI/Pause/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 text = "Paused"
 horizontal_alignment = 1
 

@@ -24,7 +24,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.08, 0.06, 0.05, 0.35)
+color = Color(0.08, 0.06, 0.05, 0.38)
 
 [node name="Vignette" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -44,30 +44,30 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -240.0
-offset_top = -210.0
+offset_top = -180.0
 offset_right = 240.0
-offset_bottom = 240.0
-theme_override_constants/separation = 8
+offset_bottom = 160.0
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Title" type="Label" parent="Center"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.88, 1)
-theme_override_font_sizes/font_size = 72
+theme_override_font_sizes/font_size = 76
 text = "Mothglass"
 horizontal_alignment = 1
 
 [node name="Rule" type="ColorRect" parent="Center"]
-custom_minimum_size = Vector2(64, 1)
+custom_minimum_size = Vector2(56, 1)
 layout_mode = 2
 size_flags_horizontal = 4
-color = Color(0.96, 0.93, 0.88, 0.4)
+color = Color(0.96, 0.93, 0.88, 0.35)
 
 [node name="Tag" type="Label" parent="Center"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.8)
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.75)
 theme_override_font_sizes/font_size = 17
 text = "Shadows that remember a shape."
 horizontal_alignment = 1
@@ -75,48 +75,56 @@ horizontal_alignment = 1
 [node name="Sub" type="Label" parent="Center"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.8, 0.74, 0.55)
+theme_override_colors/font_color = Color(0.85, 0.8, 0.74, 0.45)
 theme_override_font_sizes/font_size = 13
 text = "1 / 5"
 horizontal_alignment = 1
 
 [node name="Gap" type="Control" parent="Center"]
-custom_minimum_size = Vector2(0, 22)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="PlayBtn" type="Button" parent="Center"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 46)
+custom_minimum_size = Vector2(240, 48)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 18
 text = "Enter"
 
-[node name="ChambersBtn" type="Button" parent="Center"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 40)
+[node name="Secondary" type="HBoxContainer" parent="Center"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ChambersBtn" type="Button" parent="Center/Secondary"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
 text = "Chambers"
 
-[node name="SettingsBtn" type="Button" parent="Center"]
+[node name="SettingsBtn" type="Button" parent="Center/Secondary"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 40)
+custom_minimum_size = Vector2(110, 36)
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 13
 text = "Settings"
 
-[node name="CreditsBtn" type="Button" parent="Center"]
+[node name="CreditsBtn" type="Button" parent="Center/Secondary"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 40)
+custom_minimum_size = Vector2(110, 36)
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 13
 text = "Credits"
 
 [node name="QuitBtn" type="Button" parent="Center"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 40)
+custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 13
 text = "Leave"
 
 [node name="Version" type="Label" parent="."]
@@ -126,11 +134,11 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -36.0
+offset_left = -100.0
+offset_top = -32.0
 offset_right = -20.0
-offset_bottom = -14.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.35)
-theme_override_font_sizes/font_size = 12
+offset_bottom = -12.0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.3)
+theme_override_font_sizes/font_size = 11
 text = "v0.2.0"
 horizontal_alignment = 2

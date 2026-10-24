@@ -90,12 +90,6 @@ func _draw() -> void:
 		draw_line(p + Vector2(-5, -5), p + Vector2(5, 5), col, 2.0, true)
 		draw_line(p + Vector2(-5, 5), p + Vector2(5, -5), col, 2.0, true)
 
-	if not outlines.is_empty() and status != "":
-		var aabb := _aabb(outlines[0])
-		var pos := Vector2(aabb.position.x + aabb.size.x * 0.5 - 70.0, aabb.position.y - 28.0)
-		draw_string(ThemeDB.fallback_font, pos, status, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(0.95, 0.9, 0.8, 0.9))
-
-
 func _aabb(poly: PackedVector2Array) -> Rect2:
 	var r := Rect2(poly[0], Vector2.ZERO)
 	for p in poly:

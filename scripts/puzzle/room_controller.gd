@@ -13,16 +13,12 @@ const STYLED := "res://assets/art/styled/"
 @onready var target_ghost: Node2D = $World/TargetGhost
 @onready var bg: Sprite2D = $World/Background
 @onready var vignette: Sprite2D = $World/Vignette
-@onready var progress: ProgressBar = $UI/Progress
-@onready var progress_label: Label = $UI/ProgressLabel
+@onready var ink_track: ColorRect = %InkTrack
+@onready var ink_fill: ColorRect = %InkFill
 @onready var title_l: Label = $UI/Title
-@onready var rule_bar: Label = %RuleBar
 @onready var whisper_l: Label = $UI/Whisper
 @onready var badge: Label = $UI/Badge
 @onready var rotate_hint: Label = $UI/RotateHint
-@onready var leg_lamp: Label = %LegLamp
-@onready var leg_obj: Label = %LegObj
-@onready var leg_dot: Label = %LegDot
 @onready var btn_back: Button = $UI/Top/BtnBack
 @onready var btn_retry: Button = $UI/Top/BtnRetry
 @onready var win_panel: PanelContainer = $UI/Win
@@ -85,7 +81,8 @@ func _spawn_dust() -> void:
 func _refresh_chrome() -> void:
 	btn_back.text = Loc.tr_key("room.menu")
 	btn_retry.text = Loc.tr_key("room.again")
-	lamp_hint.text = Loc.tr_key("room.drag")
+	# Lamp hint only on tutorial rooms, fades after first drag
+	lamp_hint.text = Loc.tr_key("room.drag") if GameState.current_room <= 2 else ""
 	rotate_hint.text = Loc.tr_key("room.rotate")
 	win_title.text = Loc.tr_key("win.title")
 	win_body.text = Loc.tr_key("win.body")
@@ -93,13 +90,9 @@ func _refresh_chrome() -> void:
 	btn_menu.text = Loc.tr_key("win.menu")
 	pause_title.text = Loc.tr_key("room.pause")
 	btn_resume.text = Loc.tr_key("room.resume")
-	rule_bar.text = Loc.tr_key("rule.bar")
-	leg_lamp.text = Loc.tr_key("legend.lamp")
-	leg_obj.text = Loc.tr_key("legend.object")
-	leg_dot.text = Loc.tr_key("legend.target")
 	if GameState.current_room >= 1:
 		title_l.text = Loc.room_title(GameState.current_room)
-		whisper_l.text = Loc.room_whisper(GameState.current_room)
+		whisper_l.text = ""
 
 
 func _tex(name: String) -> Texture2D:
@@ -319,8 +312,7 @@ func _rebuild_shadows() -> void:
 	var result: Dictionary = ShadowMath.solve_score(_samples, _anti, shadow_polys)
 	_coverage = float(result.score)
 	_last_bad = float(result.bad)
-	progress.value = _coverage * 100.0
-	progress.modulate.a = lerpf(0.35, 0.95, _coverage)
+	_set_ink(_coverage)
 	_update_feedback()
 	_draw_rays(lamp_pos)
 
@@ -363,23 +355,27 @@ func _rebuild_shadows() -> void:
 			target_ghost.set_hold(0.0)
 
 
+func _set_ink(t: float) -> void:
+	var full := 128.0
+	var w := full * clampf(t, 0.0, 1.0)
+	ink_fill.offset_left = -64.0
+	ink_fill.offset_right = -64.0 + w
+	ink_fill.modulate.a = lerpf(0.35, 0.9, t)
+
+
 func _update_feedback() -> void:
-	whisper_l.modulate.a = 0.9
-	# Anti only if room actually has forbidden marks
+	# Quiet: only speak on error or hold — dots/ink teach the rest
 	if _anti.size() > 0 and _last_bad > 0.25:
 		whisper_l.text = Loc.tr_key("hint.anti")
+		whisper_l.modulate.a = 0.75
 	elif _solve_hold > 0.05:
 		whisper_l.text = Loc.tr_key("hint.hold")
-	elif _dots_total > 0 and _dots_ok > 0:
-		whisper_l.text = Loc.tr_key("hint.cover") % [_dots_ok, _dots_total]
-		if _coverage >= 0.75:
-			whisper_l.text += "  —  " + Loc.tr_key("hint.high")
-	elif GameState.current_room <= 2:
-		whisper_l.text = Loc.tr_key("hint.goal")
+		whisper_l.modulate.a = 0.7
 	else:
-		whisper_l.text = Loc.tr_key("hint.low")
+		whisper_l.text = ""
+		whisper_l.modulate.a = 0.0
 	if target_ghost.has_method("set_status"):
-		target_ghost.set_status(Loc.tr_key("zone.fill"))
+		target_ghost.set_status("")
 
 
 func _draw_rays(lamp_pos: Vector2) -> void:
