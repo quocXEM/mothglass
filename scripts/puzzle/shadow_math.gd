@@ -1,10 +1,10 @@
 class_name ShadowMath
 extends RefCounted
 
-## Đổ bóng giả lập 2D: kéo đa giác ra xa đèn.
+## Đổ bóng 2D giả lập + chấm phủ / chấm phạt.
 
 
-static func cast_shadow(poly_global: PackedVector2Array, lamp: Vector2, length := 520.0) -> PackedVector2Array:
+static func cast_shadow(poly_global: PackedVector2Array, lamp: Vector2, length := 320.0) -> PackedVector2Array:
 	if poly_global.is_empty():
 		return PackedVector2Array()
 	var near_pts := PackedVector2Array()
@@ -19,7 +19,6 @@ static func cast_shadow(poly_global: PackedVector2Array, lamp: Vector2, length :
 			dir /= d
 		near_pts.append(p)
 		far_pts.append(p + dir * length)
-	# Shadow quad strip: near ring then reverse far ring
 	var out := PackedVector2Array()
 	for p in near_pts:
 		out.append(p)
@@ -29,7 +28,6 @@ static func cast_shadow(poly_global: PackedVector2Array, lamp: Vector2, length :
 
 
 static func point_in_poly(point: Vector2, poly: PackedVector2Array) -> bool:
-	# Ray casting
 	var inside := false
 	var j := poly.size() - 1
 	for i in poly.size():
@@ -53,3 +51,11 @@ static func coverage(samples: Array, shadows: Array) -> float:
 				hit += 1
 				break
 	return float(hit) / float(samples.size())
+
+
+## Điểm = phủ mẫu − phạt vùng cấm. Cần ~0.9 và ít bóng lạc.
+static func solve_score(samples: Array, anti: Array, shadows: Array) -> Dictionary:
+	var good := coverage(samples, shadows)
+	var bad := coverage(anti, shadows) if not anti.is_empty() else 0.0
+	var score := clampf(good - 0.65 * bad, 0.0, 1.0)
+	return {"score": score, "good": good, "bad": bad}

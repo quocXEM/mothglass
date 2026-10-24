@@ -1,74 +1,73 @@
 extends Node2D
-## Vẽ vùng mục tiêu: nền sọc, viền nét đứt, chấm cần tô, nhãn.
+## Vùng mục tiêu: sọc, viền đứt, chấm tô / chấm phạt.
 
-var outline: PackedVector2Array = PackedVector2Array()
+var outlines: Array = [] # Array of PackedVector2Array
 var samples: Array = []
-var covered: Array = [] # bool per sample
-var fill_alpha := 0.12
+var anti: Array = []
+var covered: Array = []
+var anti_hit: Array = []
+var fill_alpha := 0.1
 var pulse := 0.0
 
 
-func set_target(poly: PackedVector2Array, sample_pts: Array) -> void:
-	outline = poly
+func set_target(outline_list: Array, sample_pts: Array, anti_pts: Array = []) -> void:
+	outlines = outline_list
 	samples = sample_pts
+	anti = anti_pts
 	covered.clear()
+	anti_hit.clear()
 	for _i in samples.size():
 		covered.append(false)
+	for _i in anti.size():
+		anti_hit.append(false)
 	queue_redraw()
 
 
-func set_covered(flags: Array) -> void:
-	covered = flags
+func set_covered(sample_flags: Array, anti_flags: Array = []) -> void:
+	covered = sample_flags
+	anti_hit = anti_flags
 	queue_redraw()
 
 
 func set_progress(t: float) -> void:
-	fill_alpha = lerpf(0.08, 0.28, t)
+	fill_alpha = lerpf(0.07, 0.26, t)
 	queue_redraw()
 
 
 func _process(delta: float) -> void:
-	pulse += delta * 2.2
+	pulse += delta * 2.0
 	queue_redraw()
 
 
 func _draw() -> void:
-	if outline.size() < 3:
-		return
-	# Soft fill
-	draw_colored_polygon(outline, Color(0.55, 0.22, 0.28, fill_alpha))
-	# Hatch stripes so player reads "zone to fill"
-	var aabb := _aabb(outline)
-	var step := 14.0
-	var x0 := aabb.position.x - 20.0
-	var y0 := aabb.position.y - 20.0
-	var x1 := aabb.end.x + 20.0
-	var y1 := aabb.end.y + 20.0
-	var c_hatch := Color(0.7, 0.25, 0.32, 0.22 + 0.06 * sin(pulse))
-	var x := x0
-	while x < x1 + (y1 - y0):
-		var a := Vector2(x, y0)
-		var b := Vector2(x - (y1 - y0), y1)
-		_draw_clipped_line(a, b, c_hatch, 2.0)
-		x += step
-	# Dashed outline
-	var dash_col := Color(0.75, 0.2, 0.3, 0.85)
-	_draw_dashed_poly(outline, dash_col, 3.0, 10.0, 6.0)
-	# Sample dots — empty ring until covered, then solid
+	for outline in outlines:
+		if outline.size() < 3:
+			continue
+		draw_colored_polygon(outline, Color(0.62, 0.18, 0.28, fill_alpha))
+		_hatch(outline, Color(0.75, 0.22, 0.32, 0.2 + 0.05 * sin(pulse)))
+		_dashed(outline, Color(0.8, 0.2, 0.3, 0.9), 3.0)
+
 	for i in samples.size():
 		var p: Vector2 = samples[i]
 		var ok: bool = i < covered.size() and covered[i]
 		if ok:
-			draw_circle(p, 9.0, Color(0.2, 0.55, 0.35, 0.9))
-			draw_circle(p, 4.0, Color(0.95, 0.98, 0.92, 1))
+			draw_circle(p, 8.0, Color(0.18, 0.58, 0.38, 0.95))
+			draw_circle(p, 3.5, Color(0.95, 0.98, 0.92, 1))
 		else:
-			var wob := 1.0 + 0.12 * sin(pulse + float(i))
-			draw_arc(p, 9.0 * wob, 0.0, TAU, 24, Color(0.75, 0.25, 0.32, 0.95), 2.5, true)
-			draw_circle(p, 3.0, Color(0.75, 0.25, 0.32, 0.55))
-	# Label above zone
-	var mid := Vector2(aabb.position.x + aabb.size.x * 0.5, aabb.position.y - 28.0)
-	var label := "← VÙNG CẦN TÔ BẰNG BÓNG"
-	draw_string(ThemeDB.fallback_font, mid + Vector2(-130, 0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.55, 0.18, 0.25, 0.95))
+			var wob := 1.0 + 0.1 * sin(pulse + float(i) * 0.7)
+			draw_arc(p, 8.0 * wob, 0.0, TAU, 20, Color(0.8, 0.22, 0.32, 0.95), 2.2, true)
+
+	for i in anti.size():
+		var p: Vector2 = anti[i]
+		var hit: bool = i < anti_hit.size() and anti_hit[i]
+		var col := Color(0.15, 0.15, 0.2, 0.85) if not hit else Color(0.9, 0.15, 0.1, 0.95)
+		draw_line(p + Vector2(-7, -7), p + Vector2(7, 7), col, 2.0, true)
+		draw_line(p + Vector2(-7, 7), p + Vector2(7, -7), col, 2.0, true)
+
+	if not outlines.is_empty():
+		var aabb := _aabb(outlines[0])
+		var mid := Vector2(aabb.position.x + aabb.size.x * 0.5 - 90, aabb.position.y - 26)
+		draw_string(ThemeDB.fallback_font, mid, "VÙNG CẦN TÔ", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(0.55, 0.15, 0.22, 0.95))
 
 
 func _aabb(poly: PackedVector2Array) -> Rect2:
@@ -78,40 +77,41 @@ func _aabb(poly: PackedVector2Array) -> Rect2:
 	return r
 
 
-func _draw_dashed_poly(poly: PackedVector2Array, color: Color, width: float, dash: float, gap: float) -> void:
+func _hatch(outline: PackedVector2Array, color: Color) -> void:
+	var aabb := _aabb(outline)
+	var step := 14.0
+	var x := aabb.position.x - 30.0
+	while x < aabb.end.x + aabb.size.y:
+		var a := Vector2(x, aabb.position.y - 10)
+		var b := Vector2(x - aabb.size.y - 20, aabb.end.y + 10)
+		var prev_inside := false
+		var prev := a
+		for i in 14:
+			var t := float(i) / 13.0
+			var pt := a.lerp(b, t)
+			var inside := Geometry2D.is_point_in_polygon(pt, outline)
+			if inside and prev_inside:
+				draw_line(prev, pt, color, 2.0, true)
+			prev_inside = inside
+			prev = pt
+		x += step
+
+
+func _dashed(poly: PackedVector2Array, color: Color, width: float) -> void:
 	for i in poly.size():
 		var a: Vector2 = poly[i]
 		var b: Vector2 = poly[(i + 1) % poly.size()]
-		_draw_dashed_segment(a, b, color, width, dash, gap)
-
-
-func _draw_dashed_segment(a: Vector2, b: Vector2, color: Color, width: float, dash: float, gap: float) -> void:
-	var dir := b - a
-	var length := dir.length()
-	if length < 0.01:
-		return
-	dir /= length
-	var t := 0.0
-	var draw_on := true
-	while t < length:
-		var seg := dash if draw_on else gap
-		var t2 := minf(t + seg, length)
-		if draw_on:
-			draw_line(a + dir * t, a + dir * t2, color, width, true)
-		draw_on = not draw_on
-		t = t2
-
-
-func _draw_clipped_line(a: Vector2, b: Vector2, color: Color, width: float) -> void:
-	# Only draw segments that land inside outline (sample midpoints)
-	var steps := 12
-	var prev_inside := false
-	var prev_pt := a
-	for i in range(steps + 1):
-		var t := float(i) / float(steps)
-		var pt := a.lerp(b, t)
-		var inside := Geometry2D.is_point_in_polygon(pt, outline)
-		if inside and prev_inside:
-			draw_line(prev_pt, pt, color, width, true)
-		prev_inside = inside
-		prev_pt = pt
+		var dir := b - a
+		var length := dir.length()
+		if length < 0.01:
+			continue
+		dir /= length
+		var t := 0.0
+		var on := true
+		while t < length:
+			var seg := 10.0 if on else 6.0
+			var t2 := minf(t + seg, length)
+			if on:
+				draw_line(a + dir * t, a + dir * t2, color, width, true)
+			on = not on
+			t = t2

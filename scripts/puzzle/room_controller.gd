@@ -2,16 +2,22 @@ extends Node2D
 
 signal solved
 
+const ART := "res://assets/art/"
+
 @onready var lamp: Area2D = $World/Lamp
 @onready var lamp_hint: Label = $World/Lamp/LampHint
+@onready var lamp_sprite: Sprite2D = $World/Lamp/LampSprite
 @onready var props_root: Node2D = $World/Props
 @onready var shadows: Node2D = $World/Shadows
 @onready var target_ghost: Node2D = $World/TargetGhost
+@onready var bg: Sprite2D = $World/Background
+@onready var vignette: Sprite2D = $World/Vignette
 @onready var progress: ProgressBar = $UI/Progress
 @onready var progress_label: Label = $UI/ProgressLabel
 @onready var title_l: Label = $UI/Title
 @onready var whisper_l: Label = $UI/Whisper
 @onready var badge: Label = $UI/Badge
+@onready var rotate_hint: Label = $UI/RotateHint
 @onready var btn_back: Button = $UI/Top/BtnBack
 @onready var btn_retry: Button = $UI/Top/BtnRetry
 @onready var win_panel: PanelContainer = $UI/Win
@@ -23,9 +29,13 @@ var _dragging := false
 var _drag_off := Vector2.ZERO
 var _prop_data: Array = []
 var _samples: Array = []
+var _anti: Array = []
 var _solved := false
 var _coverage := 0.0
 var _hint_pulse := 0.0
+var _shadow_len := 320.0
+var _threshold := 0.9
+var _rotatable := false
 
 
 func _ready() -> void:
@@ -35,13 +45,44 @@ func _ready() -> void:
 	btn_menu.pressed.connect(func() -> void: AudioBus.play_soft(); GameState.goto_menu())
 	win_panel.visible = false
 	lamp.input_event.connect(_on_lamp_input)
+	_setup_art()
 	_load_room(GameState.current_room)
+
+
+func _setup_art() -> void:
+	# Prefer dream atmosphere photo+paint, fallback Blender hall
+	var dream := ART + "bg_dream.jpg"
+	var hall := ART + "bg_room.png"
+	if ResourceLoader.exists(dream):
+		bg.texture = load(dream)
+	elif ResourceLoader.exists(hall):
+		bg.texture = load(hall)
+	bg.centered = false
+	bg.position = Vector2.ZERO
+	bg.scale = Vector2(1280.0 / maxf(bg.texture.get_width(), 1), 720.0 / maxf(bg.texture.get_height(), 1))
+	bg.modulate = Color(1, 1, 1, 0.92)
+
+	if ResourceLoader.exists(ART + "vignette.png"):
+		vignette.texture = load(ART + "vignette.png")
+		vignette.centered = false
+		vignette.position = Vector2.ZERO
+		vignette.modulate = Color(1, 1, 1, 0.85)
+
+	if ResourceLoader.exists(ART + "lamp.png"):
+		lamp_sprite.texture = load(ART + "lamp.png")
+		lamp_sprite.centered = true
+		lamp_sprite.scale = Vector2(0.22, 0.22)
+		# Hide procedural shapes if sprite present
+		for n in ["Halo", "Body", "Glass", "Flame", "Base"]:
+			var node := lamp.get_node_or_null(n)
+			if node:
+				node.visible = false
 
 
 func _load_room(id: int) -> void:
 	_solved = false
 	win_panel.visible = false
-	how_to.visible = true
+	how_to.visible = id <= 2
 	for c in props_root.get_children():
 		c.queue_free()
 	for c in shadows.get_children():
@@ -50,11 +91,21 @@ func _load_room(id: int) -> void:
 	var data: Dictionary = RoomCatalog.get_room(id)
 	title_l.text = RoomCatalog.title(id)
 	whisper_l.text = RoomCatalog.whisper(id)
-	badge.text = "Phòng %d / %d" % [id, GameState.TOTAL_ROOMS]
+	badge.text = "Phòng %d / %d · Khó" % [id, GameState.TOTAL_ROOMS]
 	lamp.position = data.lamp
 	_samples = data.target_samples
+	_anti = data.get("anti_samples", [])
+	_shadow_len = float(data.get("shadow_length", 320.0))
+	_threshold = float(data.get("threshold", 0.9))
+	_rotatable = bool(data.get("rotatable", false))
+	rotate_hint.visible = _rotatable
+	rotate_hint.text = "Q / E — xoay vật" if _rotatable else ""
+
+	var outlines: Array = [data.target_outline]
+	if data.has("target_outline_b"):
+		outlines.append(data.target_outline_b)
 	if target_ghost.has_method("set_target"):
-		target_ghost.set_target(data.target_outline, _samples)
+		target_ghost.set_target(outlines, _samples, _anti)
 
 	_prop_data.clear()
 	for p in data.props:
@@ -62,44 +113,29 @@ func _load_room(id: int) -> void:
 		holder.position = p.pos
 		props_root.add_child(holder)
 
-		var base := Polygon2D.new()
-		base.polygon = p.poly
-		base.color = Color(0.62, 0.48, 0.32, 0.4)
-		base.position = Vector2(5, 7)
-		holder.add_child(base)
+		var sprite_name: String = str(p.get("sprite", ""))
+		var tex_path := ART + sprite_name + ".png"
+		if sprite_name != "" and ResourceLoader.exists(tex_path):
+			var spr := Sprite2D.new()
+			spr.texture = load(tex_path)
+			spr.centered = true
+			spr.scale = p.get("sprite_scale", Vector2(0.7, 0.7))
+			holder.add_child(spr)
+		else:
+			var poly := Polygon2D.new()
+			poly.polygon = p.poly
+			poly.color = Color(0.32, 0.26, 0.2, 1)
+			holder.add_child(poly)
 
-		var poly := Polygon2D.new()
-		poly.polygon = p.poly
-		poly.color = Color(0.42, 0.3, 0.18, 1)
-		holder.add_child(poly)
-
-		# Edge highlight so props read as solid objects
-		var edge := Line2D.new()
-		edge.width = 2.5
-		edge.default_color = Color(0.22, 0.15, 0.1, 1)
-		edge.closed = true
-		for pt in p.poly:
-			edge.add_point(pt)
-		holder.add_child(edge)
-
-		var tag := Label.new()
-		var aabb := _poly_aabb(p.poly)
-		tag.text = "VẬT"
-		tag.position = Vector2(aabb.position.x, aabb.position.y - 22)
-		tag.add_theme_font_size_override("font_size", 11)
-		tag.add_theme_color_override("font_color", Color(0.35, 0.25, 0.15, 0.85))
-		holder.add_child(tag)
-
-		_prop_data.append({"node": holder, "local": p.poly})
+		# Invisible collision poly kept for shadow math
+		_prop_data.append({
+			"node": holder,
+			"local": p.poly,
+			"can_rotate": bool(p.get("can_rotate", _rotatable)),
+			"angle": 0.0,
+		})
 
 	_rebuild_shadows()
-
-
-func _poly_aabb(poly: PackedVector2Array) -> Rect2:
-	var r := Rect2(poly[0], Vector2.ZERO)
-	for pt in poly:
-		r = r.expand(pt)
-	return r
 
 
 func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
@@ -117,12 +153,34 @@ func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		_dragging = false
+	if _solved or not _rotatable:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		var delta := 0.0
+		if event.keycode == KEY_Q:
+			delta = -0.08
+		elif event.keycode == KEY_E:
+			delta = 0.08
+		if delta != 0.0:
+			for item in _prop_data:
+				if item.can_rotate:
+					item.angle += delta
+					item.node.rotation = item.angle
+			_rebuild_shadows()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			var d := -0.07 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 0.07
+			for item in _prop_data:
+				if item.can_rotate:
+					item.angle += d
+					item.node.rotation = item.angle
+			_rebuild_shadows()
 
 
 func _process(delta: float) -> void:
 	_hint_pulse += delta * 3.0
 	if not _dragging and not _solved:
-		var s := 1.0 + 0.06 * sin(_hint_pulse)
+		var s := 1.0 + 0.05 * sin(_hint_pulse)
 		lamp.scale = Vector2(s, s)
 		lamp_hint.visible = true
 		lamp_hint.modulate.a = 0.55 + 0.45 * absf(sin(_hint_pulse))
@@ -144,24 +202,25 @@ func _rebuild_shadows() -> void:
 	for item in _prop_data:
 		var node: Node2D = item.node
 		var local: PackedVector2Array = item.local
+		node.rotation = float(item.angle)
 		var global_poly := PackedVector2Array()
 		for pt in local:
 			global_poly.append(node.to_global(pt))
-		var sh := ShadowMath.cast_shadow(global_poly, lamp_pos, 640.0)
+		var sh := ShadowMath.cast_shadow(global_poly, lamp_pos, _shadow_len)
 		shadow_polys.append(sh)
 		var draw := Polygon2D.new()
 		draw.polygon = _to_local_poly(sh)
-		draw.color = Color(0.12, 0.14, 0.22, 0.62)
+		draw.color = Color(0.08, 0.09, 0.14, 0.58)
 		shadows.add_child(draw)
-		# Soft second layer for depth
-		var soft := Polygon2D.new()
-		soft.polygon = _to_local_poly(sh)
-		soft.color = Color(0.08, 0.1, 0.16, 0.22)
-		soft.position = Vector2(6, 4)
-		shadows.add_child(soft)
+
+	var result: Dictionary = ShadowMath.solve_score(_samples, _anti, shadow_polys)
+	_coverage = float(result.score)
+	progress.value = _coverage * 100.0
+	progress_label.text = "Khớp bóng: %d%%  ·  phạt %d%%" % [
+		int(float(result.good) * 100.0), int(float(result.bad) * 100.0)
+	]
 
 	var flags: Array = []
-	var hit := 0
 	for s in _samples:
 		var ok := false
 		for sh in shadow_polys:
@@ -169,17 +228,20 @@ func _rebuild_shadows() -> void:
 				ok = true
 				break
 		flags.append(ok)
-		if ok:
-			hit += 1
-	_coverage = 0.0 if _samples.is_empty() else float(hit) / float(_samples.size())
-	progress.value = _coverage * 100.0
-	progress_label.text = "Bóng khớp: %d%%" % int(_coverage * 100.0)
+	var aflags: Array = []
+	for s in _anti:
+		var ok := false
+		for sh in shadow_polys:
+			if ShadowMath.point_in_poly(s, sh):
+				ok = true
+				break
+		aflags.append(ok)
 	if target_ghost.has_method("set_covered"):
-		target_ghost.set_covered(flags)
+		target_ghost.set_covered(flags, aflags)
 	if target_ghost.has_method("set_progress"):
 		target_ghost.set_progress(_coverage)
 
-	if not _solved and _coverage >= 0.84:
+	if not _solved and _coverage >= _threshold and float(result.bad) <= 0.25:
 		_on_solved()
 
 
