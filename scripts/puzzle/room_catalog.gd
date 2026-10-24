@@ -19,11 +19,11 @@ static func get_room(id: int) -> Dictionary:
 
 
 static func title(id: int) -> String:
-	return str(get_room(id).get("title", "Room %d" % id))
+	return Loc.room_title(id)
 
 
 static func whisper(id: int) -> String:
-	return str(get_room(id).get("whisper", ""))
+	return Loc.room_whisper(id)
 
 
 static func _poly(pts: Array) -> PackedVector2Array:

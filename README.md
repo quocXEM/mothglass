@@ -1,20 +1,43 @@
 # Mothglass
 
-Puzzle **ảo giác bóng đổ** gốc — không chữ/grid (HER TREES), không xoay kiến trúc 3D (Monument Valley).
+Quiet **shadow-silhouette** puzzles. International indie structure (loc, settings, chambers, transitions).
 
-## Chơi
+> Place the lamp. Let shadows remember a shape that never existed in daylight.
+
+## Run
 
 ```bash
-open -a ~/Coder/Tools/Godot/Godot.app /Users/maidiepquoc/Coder/mothglass
+open -a ~/Coder/Tools/Godot/Godot.app ~/Coder/mothglass
 ```
 
-Kéo đèn · bóng **ngắn** phải phủ chấm đỏ · tránh dấu **X** (phạt) · phòng sau: **Q/E** xoay vật.
+F5 → boot splash → **Enter**.
+
+## Controls
+
+| Input | Action |
+|---|---|
+| Drag lamp | Move light |
+| Q / E or wheel | Rotate props (later chambers) |
+| Esc | Pause |
+
+## Project layout
+
+```
+scenes/          boot, menu, chambers, settings, credits, room
+scripts/core/    Loc, Settings, SceneRouter
+scripts/game/    GameState, AudioBus
+scripts/puzzle/  rooms, shadows
+assets/art/      Blender renders + graded sprites
+docs/            DESIGN.md
+```
 
 ## Art pipeline
 
-- **Blender 4.5** (`tools/blender_render_pro.py`) — đèn, cột, nêm, cánh, hall  
-- Nền giấc mơ + vignette trong `assets/art/`
+```bash
+~/Coder/Tools/Blender.app/Contents/MacOS/Blender --background \
+  --python tools/blender_render_pro.py
+```
 
-## Tech
+## Version
 
-Godot **4.7** · shadow math + anti-samples · threshold ≥ 0.9  
+**0.2.0** — see `CHANGELOG.md`

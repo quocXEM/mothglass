@@ -22,8 +22,13 @@ const STYLED := "res://assets/art/styled/"
 @onready var btn_back: Button = $UI/Top/BtnBack
 @onready var btn_retry: Button = $UI/Top/BtnRetry
 @onready var win_panel: PanelContainer = $UI/Win
+@onready var win_title: Label = $UI/Win/VBox/WinTitle
+@onready var win_body: Label = $UI/Win/VBox/WinBody
 @onready var btn_next: Button = $UI/Win/VBox/BtnNext
 @onready var btn_menu: Button = $UI/Win/VBox/BtnMenu
+@onready var pause_panel: PanelContainer = $UI/Pause
+@onready var pause_title: Label = $UI/Pause/VBox/PauseTitle
+@onready var btn_resume: Button = $UI/Pause/VBox/BtnResume
 
 var _dragging := false
 var _drag_off := Vector2.ZERO
@@ -37,19 +42,46 @@ var _shadow_len := 320.0
 var _threshold := 0.9
 var _rotatable := false
 var _whisper_shown := true
+var _paused := false
 
 
 func _ready() -> void:
-	btn_back.pressed.connect(func() -> void: AudioBus.play_soft(); GameState.goto_menu())
-	btn_retry.pressed.connect(func() -> void: AudioBus.play_soft(); _load_room(GameState.current_room))
+	btn_back.pressed.connect(func() -> void: AudioBus.play_ui(); GameState.goto_menu())
+	btn_retry.pressed.connect(func() -> void: AudioBus.play_ui(); _load_room(GameState.current_room))
 	btn_next.pressed.connect(_on_next)
-	btn_menu.pressed.connect(func() -> void: AudioBus.play_soft(); GameState.goto_menu())
+	btn_menu.pressed.connect(func() -> void: AudioBus.play_ui(); GameState.goto_menu())
+	btn_resume.pressed.connect(_toggle_pause)
 	win_panel.visible = false
+	pause_panel.visible = false
 	lamp.input_event.connect(_on_lamp_input)
 	_setup_art()
+	_spawn_dust()
 	_load_room(GameState.current_room)
+	_refresh_chrome()
+	Loc.language_changed.connect(func(_c): _refresh_chrome())
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, 0.55)
+
+
+func _spawn_dust() -> void:
+	var dust: Node2D = (load("res://scripts/fx/dust_motes.gd") as GDScript).new()
+	$World.add_child(dust)
+
+
+func _refresh_chrome() -> void:
+	btn_back.text = Loc.tr_key("room.menu")
+	btn_retry.text = Loc.tr_key("room.again")
+	lamp_hint.text = Loc.tr_key("room.drag")
+	rotate_hint.text = Loc.tr_key("room.rotate")
+	win_title.text = Loc.tr_key("win.title")
+	win_body.text = Loc.tr_key("win.body")
+	btn_next.text = Loc.tr_key("win.next")
+	btn_menu.text = Loc.tr_key("win.menu")
+	pause_title.text = Loc.tr_key("room.pause")
+	btn_resume.text = Loc.tr_key("room.resume")
+	if GameState.current_room >= 1:
+		title_l.text = Loc.room_title(GameState.current_room)
+		whisper_l.text = Loc.room_whisper(GameState.current_room)
 
 
 func _tex(name: String) -> Texture2D:
@@ -104,11 +136,11 @@ func _load_room(id: int) -> void:
 		c.queue_free()
 
 	var data: Dictionary = RoomCatalog.get_room(id)
-	title_l.text = RoomCatalog.title(id)
-	# Short whisper only; fades after first drag
-	whisper_l.text = RoomCatalog.whisper(id)
+	title_l.text = Loc.room_title(id)
+	whisper_l.text = Loc.room_whisper(id)
 	whisper_l.modulate.a = 0.7
 	badge.text = _roman(id)
+	_refresh_chrome()
 	lamp.position = data.lamp
 	_samples = data.target_samples
 	_anti = data.get("anti_samples", [])
@@ -169,6 +201,11 @@ func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		_toggle_pause()
+		return
+	if _paused:
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		_dragging = false
 	if _solved or not _rotatable:
@@ -195,7 +232,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			_rebuild_shadows()
 
 
+func _toggle_pause() -> void:
+	if _solved:
+		return
+	_paused = not _paused
+	pause_panel.visible = _paused
+	_dragging = false
+	AudioBus.play_ui()
+
+
 func _process(delta: float) -> void:
+	if _paused:
+		return
 	_hint_pulse += delta * 2.4
 	if not _dragging and not _solved:
 		var s := 1.0 + 0.035 * sin(_hint_pulse)
@@ -283,8 +331,11 @@ func _draw_soft_shadow(sh: PackedVector2Array) -> void:
 func _on_solved() -> void:
 	_solved = true
 	_dragging = false
+	_paused = false
+	pause_panel.visible = false
 	lamp_hint.visible = false
 	AudioBus.play_solve()
+	SceneRouter.flash_white(0.4)
 	GameState.mark_done(GameState.current_room)
 	win_panel.visible = true
 	win_panel.modulate.a = 0.0

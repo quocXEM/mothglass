@@ -44,8 +44,24 @@ func play_room(id: int) -> void:
 		return
 	current_room = id
 	save()
-	get_tree().change_scene_to_file("res://scenes/room.tscn")
+	SceneRouter.go("res://scenes/room.tscn")
 
 
 func goto_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	SceneRouter.go("res://scenes/main_menu.tscn")
+
+
+func goto_settings() -> void:
+	SceneRouter.go("res://scenes/settings.tscn")
+
+
+func goto_credits() -> void:
+	SceneRouter.go("res://scenes/credits.tscn")
+
+
+func goto_chambers() -> void:
+	SceneRouter.go("res://scenes/chambers.tscn")
+
+
+func is_done(id: int) -> bool:
+	return completed.get(id, false) == true

@@ -200,3 +200,31 @@ text = "Continue"
 [node name="BtnMenu" type="Button" parent="UI/Win/VBox"]
 layout_mode = 2
 text = "Menu"
+
+[node name="Pause" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -80.0
+offset_right = 140.0
+offset_bottom = 80.0
+
+[node name="VBox" type="VBoxContainer" parent="UI/Pause"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PauseTitle" type="Label" parent="UI/Pause/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="BtnResume" type="Button" parent="UI/Pause/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Resume"

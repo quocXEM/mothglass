@@ -1,10 +1,4 @@
-; Engine configuration file.
-; It's best edited using the editor UI and not directly,
-; since the parameters that go here are not all obvious.
-;
-; Format:
-;   [section] ; section goes between []
-;   param=value ; assign values to parameters
+; Mothglass — studio build
 
 config_version=5
 
@@ -12,15 +6,18 @@ config_version=5
 
 config/name="Mothglass"
 config/description="Arrange dream-lamps until shadows remember a shape that never existed in daylight."
-config/version="0.1.0"
-run/main_scene="res://scenes/main_menu.tscn"
+config/version="0.2.0"
+run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameState="*res://scripts/game/game_state.gd"
+Loc="*res://scripts/core/loc.gd"
 AudioBus="*res://scripts/game/audio_bus.gd"
+Settings="*res://scripts/core/settings.gd"
+GameState="*res://scripts/game/game_state.gd"
+SceneRouter="*res://scripts/core/scene_router.gd"
 AppTheme="*res://assets/ui/theme_mothglass.gd"
 
 [display]
@@ -29,7 +26,13 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/size/window_width_override=1280
+window/size/window_height_override=720
+
+[internationalization]
+
+locale/fallback="en"
 
 [rendering]
 
-environment/defaults/default_clear_color=Color(0.9, 0.88, 0.84, 1)
+environment/defaults/default_clear_color=Color(0.08, 0.07, 0.06, 1)
