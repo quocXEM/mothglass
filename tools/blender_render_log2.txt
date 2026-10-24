@@ -1,0 +1,42 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:31:45)
+Fra:1 Mem:41.43M (Peak 41.43M) | Time:00:00.13 | Rendering 1 / 64 samples
+Fra:1 Mem:41.51M (Peak 41.51M) | Time:00:00.43 | Rendering 25 / 64 samples
+Fra:1 Mem:41.51M (Peak 41.51M) | Time:00:00.52 | Rendering 50 / 64 samples
+Fra:1 Mem:41.51M (Peak 41.51M) | Time:00:00.58 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_block.png'
+Time: 00:00.64 (Saving: 00:00.06)
+
+Fra:1 Mem:42.14M (Peak 42.14M) | Time:00:00.17 | Rendering 1 / 64 samples
+Fra:1 Mem:42.15M (Peak 42.15M) | Time:00:00.29 | Rendering 25 / 64 samples
+Fra:1 Mem:42.21M (Peak 42.21M) | Time:00:00.44 | Rendering 50 / 64 samples
+Fra:1 Mem:42.15M (Peak 42.21M) | Time:00:00.51 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_l.png'
+Time: 00:00.56 (Saving: 00:00.01)
+
+Fra:1 Mem:42.16M (Peak 42.16M) | Time:00:00.07 | Rendering 1 / 64 samples
+Fra:1 Mem:42.16M (Peak 42.16M) | Time:00:00.23 | Rendering 25 / 64 samples
+Fra:1 Mem:42.22M (Peak 42.22M) | Time:00:00.37 | Rendering 50 / 64 samples
+Fra:1 Mem:42.16M (Peak 42.22M) | Time:00:00.44 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_r.png'
+Time: 00:00.45 (Saving: 00:00.00)
+
+Fra:1 Mem:42.79M (Peak 42.79M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:42.79M (Peak 42.79M) | Time:00:00.18 | Rendering 25 / 64 samples
+Fra:1 Mem:42.86M (Peak 42.86M) | Time:00:00.33 | Rendering 50 / 64 samples
+Fra:1 Mem:42.79M (Peak 42.86M) | Time:00:00.41 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/ui_plaque.png'
+Time: 00:00.42 (Saving: 00:00.00)
+
+=== Mothglass Blender art render ===
+SKIP bg_room.png
+SKIP lamp.png
+SKIP prop_pillar.png
+SKIP prop_beam.png
+SKIP prop_wedge.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_block.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_l.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_r.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/ui_plaque.png
+DONE -> /Users/maidiepquoc/Coder/mothglass/assets/art
+
+Blender quit

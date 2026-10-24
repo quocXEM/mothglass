@@ -1,16 +1,6 @@
 # Mothglass
 
-Game puzzle **2D giấc mơ** — cơ chế gốc, không phải bản sao HER TREES / Monument Valley / Mirage Steps.
-
-## Ý tưởng gốc (chưa thấy game nào làm đúng kiểu này)
-
-> **Kéo đèn trong phòng đơn sắc. Bóng của các vật phải ghép thành một silhouette “nhớ lại”. Khi bóng phủ đủ hình ma, phòng mở.**
-
-| Game khác | Họ làm gì | Mothglass khác chỗ nào |
-|---|---|---|
-| HER TREES | Kéo vật + tìm chữ → nhập lưới A–I | **Không chữ, không lưới** — chỉ bóng phủ hình |
-| Monument Valley | Xoay kiến trúc 3D | **2D đổ bóng**, không xoay tượng đài |
-| Match / hidden object | Tìm item | Không inventory |
+Puzzle **ảo giác bóng đổ** gốc — không chữ/grid (HER TREES), không xoay kiến trúc 3D (Monument Valley).
 
 ## Chơi
 
@@ -18,17 +8,13 @@ Game puzzle **2D giấc mơ** — cơ chế gốc, không phải bản sao HER T
 open -a ~/Coder/Tools/Godot/Godot.app /Users/maidiepquoc/Coder/mothglass
 ```
 
-F5 → **Vào giấc mơ** → kéo **đèn đen** → thanh dưới đầy khi bóng khớp silhouette mờ.
+Kéo đèn · bóng **ngắn** phải phủ chấm đỏ · tránh dấu **X** (phạt) · phòng sau: **Q/E** xoay vật.
 
-## 5 phòng
+## Art pipeline
 
-1. Đèn đầu tiên  
-2. Hai bóng một cánh  
-3. Vòng nhớ  
-4. Chữ không chữ (cổng bóng)  
-5. Bướm kính  
+- **Blender 4.5** (`tools/blender_render_pro.py`) — đèn, cột, nêm, cánh, hall  
+- Nền giấc mơ + vignette trong `assets/art/`
 
 ## Tech
 
-- Godot **4.7** · 2D  
-- Shadow cast giả lập hình học + điểm mẫu phủ silhouette  
+Godot **4.7** · shadow math + anti-samples · threshold ≥ 0.9  

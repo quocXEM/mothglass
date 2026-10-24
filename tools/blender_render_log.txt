@@ -1,0 +1,55 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:31:45)
+Fra:1 Mem:55.90M (Peak 55.90M) | Time:00:05.08 | Rendering 1 / 64 samples
+Fra:1 Mem:55.99M (Peak 55.99M) | Time:00:05.50 | Rendering 25 / 64 samples
+Fra:1 Mem:55.99M (Peak 55.99M) | Time:00:05.81 | Rendering 50 / 64 samples
+Fra:1 Mem:55.99M (Peak 55.99M) | Time:00:05.98 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/bg_room.png'
+Time: 00:06.13 (Saving: 00:00.12)
+
+Fra:1 Mem:47.05M (Peak 47.05M) | Time:00:02.26 | Rendering 1 / 64 samples
+Fra:1 Mem:47.06M (Peak 47.06M) | Time:00:02.47 | Rendering 25 / 64 samples
+Fra:1 Mem:47.06M (Peak 47.06M) | Time:00:02.67 | Rendering 50 / 64 samples
+Fra:1 Mem:47.06M (Peak 47.06M) | Time:00:02.78 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/lamp.png'
+Time: 00:02.81 (Saving: 00:00.01)
+
+Fra:1 Mem:43.11M (Peak 43.11M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:43.11M (Peak 43.11M) | Time:00:00.17 | Rendering 25 / 64 samples
+Fra:1 Mem:43.17M (Peak 43.17M) | Time:00:00.29 | Rendering 50 / 64 samples
+Fra:1 Mem:43.11M (Peak 43.17M) | Time:00:00.36 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_pillar.png'
+Time: 00:00.37 (Saving: 00:00.01)
+
+Fra:1 Mem:41.90M (Peak 41.90M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:41.90M (Peak 41.90M) | Time:00:00.16 | Rendering 25 / 64 samples
+Fra:1 Mem:41.96M (Peak 41.96M) | Time:00:00.26 | Rendering 50 / 64 samples
+Fra:1 Mem:41.90M (Peak 41.96M) | Time:00:00.32 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_beam.png'
+Time: 00:00.32 (Saving: 00:00.00)
+
+Fra:1 Mem:42.22M (Peak 42.22M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:42.22M (Peak 42.22M) | Time:00:00.17 | Rendering 25 / 64 samples
+Fra:1 Mem:42.28M (Peak 42.28M) | Time:00:00.28 | Rendering 50 / 64 samples
+Fra:1 Mem:42.22M (Peak 42.28M) | Time:00:00.34 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wedge.png'
+Time: 00:00.35 (Saving: 00:00.01)
+
+Traceback (most recent call last):
+  File "/Users/maidiepquoc/Coder/mothglass/tools/blender_render_mothglass.py", line 332, in <module>
+    main()
+  File "/Users/maidiepquoc/Coder/mothglass/tools/blender_render_mothglass.py", line 324, in main
+    make_prop_block()
+  File "/Users/maidiepquoc/Coder/mothglass/tools/blender_render_mothglass.py", line 209, in make_prop_block
+    bpy.ops.mesh.primitive_bevel(offset=0.06, segments=2)
+  File "/Users/maidiepquoc/Coder/Tools/Blender.app/Contents/Resources/4.5/scripts/modules/bpy/ops.py", line 109, in __call__
+    ret = _op_call(self.idname_py(), kw)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: Calling operator "bpy.ops.mesh.primitive_bevel" error, could not be found
+=== Mothglass Blender art render ===
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/bg_room.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/lamp.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_pillar.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_beam.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wedge.png
+
+Blender quit

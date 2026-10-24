@@ -1,0 +1,78 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:31:45)
+Fra:1 Mem:69.85M (Peak 69.85M) | Time:00:00.47 | Rendering 1 / 96 samples
+Fra:1 Mem:69.93M (Peak 69.93M) | Time:00:01.77 | Rendering 25 / 96 samples
+Fra:1 Mem:69.93M (Peak 69.93M) | Time:00:03.02 | Rendering 50 / 96 samples
+Fra:1 Mem:69.93M (Peak 69.93M) | Time:00:04.28 | Rendering 75 / 96 samples
+Fra:1 Mem:69.93M (Peak 69.93M) | Time:00:05.32 | Rendering 96 / 96 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/bg_room.png'
+Time: 00:05.48 (Saving: 00:00.12)
+
+Fra:1 Mem:50.52M (Peak 50.52M) | Time:00:01.93 | Rendering 1 / 96 samples
+Fra:1 Mem:50.53M (Peak 50.53M) | Time:00:02.33 | Rendering 25 / 96 samples
+Fra:1 Mem:50.53M (Peak 50.53M) | Time:00:02.75 | Rendering 50 / 96 samples
+Fra:1 Mem:50.53M (Peak 50.53M) | Time:00:03.17 | Rendering 75 / 96 samples
+Fra:1 Mem:50.53M (Peak 50.53M) | Time:00:03.52 | Rendering 96 / 96 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/lamp.png'
+Time: 00:03.56 (Saving: 00:00.02)
+
+Fra:1 Mem:45.23M (Peak 45.23M) | Time:00:00.04 | Rendering 1 / 64 samples
+Fra:1 Mem:45.17M (Peak 45.23M) | Time:00:00.27 | Rendering 25 / 64 samples
+Fra:1 Mem:45.23M (Peak 45.23M) | Time:00:00.41 | Rendering 50 / 64 samples
+Fra:1 Mem:45.17M (Peak 45.23M) | Time:00:00.48 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_pillar.png'
+Time: 00:00.49 (Saving: 00:00.01)
+
+Fra:1 Mem:42.51M (Peak 42.51M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:42.51M (Peak 42.51M) | Time:00:00.17 | Rendering 25 / 64 samples
+Fra:1 Mem:42.57M (Peak 42.57M) | Time:00:00.27 | Rendering 50 / 64 samples
+Fra:1 Mem:42.51M (Peak 42.57M) | Time:00:00.33 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_beam.png'
+Time: 00:00.34 (Saving: 00:00.00)
+
+Fra:1 Mem:42.33M (Peak 42.33M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:42.33M (Peak 42.33M) | Time:00:00.18 | Rendering 25 / 64 samples
+Fra:1 Mem:42.40M (Peak 42.40M) | Time:00:00.30 | Rendering 50 / 64 samples
+Fra:1 Mem:42.33M (Peak 42.40M) | Time:00:00.37 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_block.png'
+Time: 00:00.38 (Saving: 00:00.00)
+
+Fra:1 Mem:42.73M (Peak 42.73M) | Time:00:00.06 | Rendering 1 / 64 samples
+Fra:1 Mem:42.73M (Peak 42.73M) | Time:00:00.17 | Rendering 25 / 64 samples
+Fra:1 Mem:42.79M (Peak 42.79M) | Time:00:00.28 | Rendering 50 / 64 samples
+Fra:1 Mem:42.73M (Peak 42.79M) | Time:00:00.34 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wedge.png'
+Time: 00:00.35 (Saving: 00:00.01)
+
+Fra:1 Mem:43.23M (Peak 43.23M) | Time:00:03.39 | Rendering 1 / 64 samples
+Fra:1 Mem:43.23M (Peak 43.23M) | Time:00:03.56 | Rendering 25 / 64 samples
+Fra:1 Mem:43.30M (Peak 43.30M) | Time:00:03.65 | Rendering 50 / 64 samples
+Fra:1 Mem:43.23M (Peak 43.30M) | Time:00:03.71 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_l.png'
+Time: 00:03.72 (Saving: 00:00.00)
+
+Fra:1 Mem:43.26M (Peak 43.26M) | Time:00:00.05 | Rendering 1 / 64 samples
+Fra:1 Mem:43.26M (Peak 43.26M) | Time:00:00.18 | Rendering 25 / 64 samples
+Fra:1 Mem:43.32M (Peak 43.32M) | Time:00:00.31 | Rendering 50 / 64 samples
+Fra:1 Mem:43.26M (Peak 43.32M) | Time:00:00.39 | Rendering 64 / 64 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_r.png'
+Time: 00:00.40 (Saving: 00:00.00)
+
+Fra:1 Mem:43.59M (Peak 43.59M) | Time:00:00.05 | Rendering 1 / 48 samples
+Fra:1 Mem:43.59M (Peak 43.59M) | Time:00:00.17 | Rendering 25 / 48 samples
+Fra:1 Mem:43.59M (Peak 43.59M) | Time:00:00.29 | Rendering 48 / 48 samples
+Saved: '/Users/maidiepquoc/Coder/mothglass/assets/art/ui_plaque.png'
+Time: 00:00.30 (Saving: 00:00.00)
+
+=== PRO art pass ===
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/bg_room.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/lamp.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_pillar.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_beam.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_block.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wedge.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_l.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/prop_wing_r.png
+WROTE /Users/maidiepquoc/Coder/mothglass/assets/art/ui_plaque.png
+DONE
+
+Blender quit
