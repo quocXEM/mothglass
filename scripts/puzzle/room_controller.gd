@@ -44,7 +44,10 @@ var _rotatable := false
 var _whisper_shown := true
 var _paused := false
 var _solve_hold := 0.0
-const SOLVE_HOLD_SEC := 0.55
+const SOLVE_HOLD_SEC := 0.7
+var _rays: Node2D
+var _stage: Polygon2D
+var _last_bad := 0.0
 
 
 func _ready() -> void:
@@ -107,13 +110,29 @@ func _setup_art() -> void:
 	bg.position = Vector2.ZERO
 	if bg.texture:
 		bg.scale = Vector2(1280.0 / float(bg.texture.get_width()), 720.0 / float(bg.texture.get_height()))
-	bg.modulate = Color(0.92, 0.9, 0.86, 1)
+	# Dim decorative wall art so puzzle props/shadows read first
+	bg.modulate = Color(0.55, 0.52, 0.48, 1)
 
 	if ResourceLoader.exists(ART + "vignette.png"):
 		vignette.texture = load(ART + "vignette.png")
 		vignette.centered = false
 		vignette.position = Vector2.ZERO
-		vignette.modulate = Color(1, 1, 1, 0.9)
+		vignette.modulate = Color(1, 1, 1, 0.95)
+
+	# Puzzle stage — separates play area from background moth decoration
+	if _stage == null:
+		_stage = Polygon2D.new()
+		_stage.z_index = -2
+		_stage.color = Color(0.12, 0.1, 0.09, 0.45)
+		_stage.polygon = PackedVector2Array([
+			Vector2(80, 120), Vector2(1200, 120), Vector2(1200, 660), Vector2(80, 660),
+		])
+		$World.add_child(_stage)
+		$World.move_child(_stage, 1)
+	if _rays == null:
+		_rays = Node2D.new()
+		_rays.z_index = 0
+		$World.add_child(_rays)
 
 	var lamp_tex := _tex("lamp.png")
 	if lamp_tex:
@@ -171,13 +190,21 @@ func _load_room(id: int) -> void:
 			spr.texture = tex
 			spr.centered = true
 			spr.scale = p.get("sprite_scale", Vector2(0.7, 0.7))
-			spr.modulate = Color(0.95, 0.92, 0.88, 0.95)
+			spr.modulate = Color(1, 0.98, 0.94, 1)
 			holder.add_child(spr)
 		else:
 			var poly := Polygon2D.new()
 			poly.polygon = p.poly
-			poly.color = Color(0.22, 0.18, 0.15, 0.92)
+			poly.color = Color(0.28, 0.24, 0.2, 1)
 			holder.add_child(poly)
+		# Bright rim so props don't vanish into background
+		var rim := Line2D.new()
+		rim.width = 3.0
+		rim.default_color = Color(0.95, 0.88, 0.7, 0.75)
+		rim.closed = true
+		for pt in p.poly:
+			rim.add_point(pt)
+		holder.add_child(rim)
 
 		_prop_data.append({
 			"node": holder,
@@ -195,9 +222,6 @@ func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
 			_dragging = true
 			_drag_off = lamp.global_position - get_global_mouse_position()
 			lamp_hint.visible = false
-			if _whisper_shown:
-				_whisper_shown = false
-				create_tween().tween_property(whisper_l, "modulate:a", 0.0, 0.8)
 			AudioBus.play_soft()
 		else:
 			_dragging = false
@@ -281,8 +305,11 @@ func _rebuild_shadows() -> void:
 
 	var result: Dictionary = ShadowMath.solve_score(_samples, _anti, shadow_polys)
 	_coverage = float(result.score)
+	_last_bad = float(result.bad)
 	progress.value = _coverage * 100.0
-	progress.modulate.a = lerpf(0.25, 0.85, _coverage)
+	progress.modulate.a = lerpf(0.35, 0.95, _coverage)
+	_update_feedback()
+	_draw_rays(lamp_pos)
 
 	var flags: Array = []
 	for s in _samples:
@@ -309,18 +336,55 @@ func _rebuild_shadows() -> void:
 	var matching := (not _solved) and _coverage >= _threshold and float(result.bad) <= 0.25
 	if matching:
 		_solve_hold += get_process_delta_time()
+		if target_ghost.has_method("set_hold"):
+			target_ghost.set_hold(_solve_hold / SOLVE_HOLD_SEC)
 		if _solve_hold >= SOLVE_HOLD_SEC:
 			_on_solved()
 	else:
 		_solve_hold = 0.0
+		if target_ghost.has_method("set_hold"):
+			target_ghost.set_hold(0.0)
+
+
+func _update_feedback() -> void:
+	whisper_l.modulate.a = 0.9
+	var key := "hint.low"
+	if _last_bad > 0.25:
+		key = "hint.anti"
+	elif _solve_hold > 0.05:
+		key = "hint.hold"
+	elif _coverage >= 0.75:
+		key = "hint.high"
+	elif _coverage >= 0.35:
+		key = "hint.mid"
+	elif _coverage < 0.08:
+		key = "hint.goal" if GameState.current_room <= 2 else "hint.low"
+	whisper_l.text = Loc.tr_key(key)
+	if target_ghost.has_method("set_status"):
+		target_ghost.set_status(Loc.tr_key("zone.fill"))
+
+
+func _draw_rays(lamp_pos: Vector2) -> void:
+	if _rays == null:
+		return
+	for c in _rays.get_children():
+		c.queue_free()
+	for item in _prop_data:
+		var node: Node2D = item.node
+		var line := Line2D.new()
+		line.width = 1.5
+		line.default_color = Color(1.0, 0.9, 0.55, 0.18)
+		line.add_point(_rays.to_local(lamp_pos))
+		line.add_point(_rays.to_local(node.global_position))
+		_rays.add_child(line)
 
 
 func _draw_soft_shadow(sh: PackedVector2Array) -> void:
-	# Layered translucent polys = soft ink shadow without debug edges
+	# Darker, clearer shadows so cause→effect is obvious
 	var layers := [
-		{"scale": 1.06, "a": 0.1, "off": Vector2(10, 8)},
-		{"scale": 1.02, "a": 0.16, "off": Vector2(5, 4)},
-		{"scale": 1.0, "a": 0.34, "off": Vector2.ZERO},
+		{"scale": 1.08, "a": 0.14, "off": Vector2(12, 10)},
+		{"scale": 1.03, "a": 0.22, "off": Vector2(6, 5)},
+		{"scale": 1.0, "a": 0.48, "off": Vector2.ZERO},
 	]
 	var center := Vector2.ZERO
 	for p in sh:

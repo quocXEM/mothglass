@@ -34,46 +34,42 @@ static func _poly(pts: Array) -> PackedVector2Array:
 
 
 static func _r1() -> Dictionary:
-	# Hai cột — bóng phải phủ CẢ vùng trên lẫn dưới (túi đèn hẹp).
+	# Tutorial rõ: 1 cột, kéo đèn SANG TRÁI → bóng phủ vùng PHẢI.
 	return {
-		"title": "Hai đảo bóng",
-		"whisper": "Một bóng. Hai khoảng nhớ.",
-		"lamp": Vector2(1100, 80),
-		"shadow_length": 280.0,
-		"threshold": 0.9,
+		"title": "Bóng đầu tiên",
+		"whisper": "Kéo đèn. Phủ hết mọi chấm sáng.",
+		"lamp": Vector2(1000, 120),
+		"shadow_length": 420.0,
+		"threshold": 0.88,
 		"rotatable": false,
 		"props": [
-			{"pos": Vector2(420, 360), "poly": _poly([Vector2(-20, -60), Vector2(20, -60), Vector2(22, 60), Vector2(-22, 60)]), "sprite": "prop_pillar", "sprite_scale": Vector2(0.55, 0.7)},
-			{"pos": Vector2(860, 360), "poly": _poly([Vector2(-20, -60), Vector2(20, -60), Vector2(22, 60), Vector2(-22, 60)]), "sprite": "prop_pillar", "sprite_scale": Vector2(0.55, 0.7)},
+			{"pos": Vector2(520, 380), "poly": _poly([Vector2(-22, -80), Vector2(22, -80), Vector2(24, 80), Vector2(-24, 80)]), "sprite": "prop_pillar", "sprite_scale": Vector2(0.6, 0.85)},
 		],
 		"target_samples": [
-			Vector2(640, 200), Vector2(620, 210), Vector2(660, 210), Vector2(640, 230), Vector2(600, 220), Vector2(680, 220),
-			Vector2(640, 520), Vector2(620, 530), Vector2(660, 530), Vector2(640, 550), Vector2(600, 540), Vector2(680, 540),
+			Vector2(720, 360), Vector2(760, 360), Vector2(800, 360), Vector2(840, 360),
+			Vector2(740, 400), Vector2(780, 400), Vector2(820, 400), Vector2(860, 400),
 		],
 		"anti_samples": [
-			Vector2(420, 300), Vector2(420, 340), Vector2(420, 380), Vector2(300, 420),
-			Vector2(340, 380), Vector2(340, 420), Vector2(380, 340), Vector2(380, 380),
+			Vector2(520, 200), Vector2(520, 560), Vector2(300, 380),
 		],
 		"target_outline": _poly([
-			Vector2(580, 185), Vector2(700, 185), Vector2(700, 245), Vector2(580, 245),
-		]),
-		"target_outline_b": _poly([
-			Vector2(580, 505), Vector2(700, 505), Vector2(700, 565), Vector2(580, 565),
+			Vector2(700, 330), Vector2(880, 330), Vector2(880, 430), Vector2(700, 430),
 		]),
 	}
 
 
 static func _r2() -> Dictionary:
+	# Hai nêm — bóng phải phủ vùng DƯỚI. Đèn đúng khoảng phía trên giữa-phải.
 	return {
-		"title": "Góc hẹp",
-		"whisper": "Góc hẹp hơn bạn nghĩ.",
+		"title": "Hai bóng",
+		"whisper": "Hai vật. Một đèn. Phủ hình phía dưới.",
 		"lamp": Vector2(80, 600),
 		"shadow_length": 340.0,
-		"threshold": 0.92,
+		"threshold": 0.9,
 		"rotatable": false,
 		"props": [
-			{"pos": Vector2(500, 340), "poly": _poly([Vector2(0, -70), Vector2(55, 45), Vector2(-55, 45)]), "sprite": "prop_wedge", "sprite_scale": Vector2(0.85, 0.85)},
-			{"pos": Vector2(780, 340), "poly": _poly([Vector2(0, -70), Vector2(55, 45), Vector2(-55, 45)]), "sprite": "prop_wedge", "sprite_scale": Vector2(0.85, 0.85)},
+			{"pos": Vector2(500, 340), "poly": _poly([Vector2(0, -70), Vector2(55, 45), Vector2(-55, 45)]), "sprite": "prop_wedge", "sprite_scale": Vector2(0.9, 0.9)},
+			{"pos": Vector2(780, 340), "poly": _poly([Vector2(0, -70), Vector2(55, 45), Vector2(-55, 45)]), "sprite": "prop_wedge", "sprite_scale": Vector2(0.9, 0.9)},
 		],
 		"target_samples": [
 			Vector2(640, 560), Vector2(610, 575), Vector2(670, 575), Vector2(640, 595),
@@ -81,7 +77,7 @@ static func _r2() -> Dictionary:
 			Vector2(600, 585), Vector2(680, 585),
 		],
 		"anti_samples": [
-			Vector2(640, 420), Vector2(560, 400), Vector2(720, 400), Vector2(640, 480), Vector2(500, 500), Vector2(780, 500),
+			Vector2(640, 420), Vector2(560, 400), Vector2(720, 400), Vector2(640, 480),
 		],
 		"target_outline": _poly([
 			Vector2(560, 540), Vector2(720, 540), Vector2(730, 620), Vector2(550, 620),
