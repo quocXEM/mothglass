@@ -13,7 +13,6 @@ const STYLED := "res://assets/art/styled/"
 @onready var target_ghost: Node2D = $World/TargetGhost
 @onready var bg: Sprite2D = $World/Background
 @onready var vignette: Sprite2D = $World/Vignette
-@onready var ink_track: ColorRect = %InkTrack
 @onready var ink_fill: ColorRect = %InkFill
 @onready var title_l: Label = $UI/Title
 @onready var whisper_l: Label = $UI/Whisper
