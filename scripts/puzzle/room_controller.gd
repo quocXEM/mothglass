@@ -16,9 +16,13 @@ const STYLED := "res://assets/art/styled/"
 @onready var progress: ProgressBar = $UI/Progress
 @onready var progress_label: Label = $UI/ProgressLabel
 @onready var title_l: Label = $UI/Title
+@onready var rule_bar: Label = %RuleBar
 @onready var whisper_l: Label = $UI/Whisper
 @onready var badge: Label = $UI/Badge
 @onready var rotate_hint: Label = $UI/RotateHint
+@onready var leg_lamp: Label = %LegLamp
+@onready var leg_obj: Label = %LegObj
+@onready var leg_dot: Label = %LegDot
 @onready var btn_back: Button = $UI/Top/BtnBack
 @onready var btn_retry: Button = $UI/Top/BtnRetry
 @onready var win_panel: PanelContainer = $UI/Win
@@ -64,6 +68,9 @@ func _ready() -> void:
 	_load_room(GameState.current_room)
 	_refresh_chrome()
 	Loc.language_changed.connect(func(_c): _refresh_chrome())
+	if not GameState.coach_seen:
+		var coach: CanvasLayer = (load("res://scripts/ui/coach_overlay.gd") as GDScript).new()
+		add_child(coach)
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, 0.55)
 
@@ -84,6 +91,10 @@ func _refresh_chrome() -> void:
 	btn_menu.text = Loc.tr_key("win.menu")
 	pause_title.text = Loc.tr_key("room.pause")
 	btn_resume.text = Loc.tr_key("room.resume")
+	rule_bar.text = Loc.tr_key("rule.bar")
+	leg_lamp.text = Loc.tr_key("legend.lamp")
+	leg_obj.text = Loc.tr_key("legend.object")
+	leg_dot.text = Loc.tr_key("legend.target")
 	if GameState.current_room >= 1:
 		title_l.text = Loc.room_title(GameState.current_room)
 		whisper_l.text = Loc.room_whisper(GameState.current_room)
@@ -100,18 +111,18 @@ func _tex(name: String) -> Texture2D:
 
 
 func _setup_art() -> void:
-	var dream := ART + "bg_dream.jpg"
+	# Play rooms use hall WITHOUT wall-moth art (avoids confusing decoration with puzzle)
 	var hall := ART + "bg_room.png"
-	if ResourceLoader.exists(dream):
-		bg.texture = load(dream)
-	elif ResourceLoader.exists(hall):
+	var dream := ART + "bg_dream.jpg"
+	if ResourceLoader.exists(hall):
 		bg.texture = load(hall)
+	elif ResourceLoader.exists(dream):
+		bg.texture = load(dream)
 	bg.centered = false
 	bg.position = Vector2.ZERO
 	if bg.texture:
 		bg.scale = Vector2(1280.0 / float(bg.texture.get_width()), 720.0 / float(bg.texture.get_height()))
-	# Dim decorative wall art so puzzle props/shadows read first
-	bg.modulate = Color(0.55, 0.52, 0.48, 1)
+	bg.modulate = Color(0.72, 0.68, 0.62, 1)
 
 	if ResourceLoader.exists(ART + "vignette.png"):
 		vignette.texture = load(ART + "vignette.png")

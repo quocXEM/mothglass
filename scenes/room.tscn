@@ -78,22 +78,37 @@ anchors_preset = 10
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 18.0
+offset_top = 12.0
 offset_right = 200.0
-offset_bottom = 56.0
+offset_bottom = 44.0
 theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 0.92)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 26
 text = "Mothglass"
 horizontal_alignment = 1
+
+[node name="RuleBar" type="Label" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 46.0
+offset_right = 420.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 0.9)
+theme_override_font_sizes/font_size = 14
+text = "GOAL: Cover the glowing dots with the object's shadow."
+horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="Badge" type="Label" parent="UI"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -120.0
-offset_top = 22.0
+offset_top = 16.0
 offset_right = -24.0
-offset_bottom = 48.0
+offset_bottom = 42.0
 theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.55)
 theme_override_font_sizes/font_size = 13
 text = "I"
@@ -105,13 +120,45 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -160.0
-offset_top = 48.0
+offset_top = 42.0
 offset_right = -24.0
-offset_bottom = 70.0
+offset_bottom = 64.0
 theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.4)
 theme_override_font_sizes/font_size = 12
 text = "Q  E"
 horizontal_alignment = 2
+
+[node name="Legend" type="HBoxContainer" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -40.0
+offset_right = 520.0
+offset_bottom = -14.0
+theme_override_constants/separation = 16
+
+[node name="LegLamp" type="Label" parent="UI/Legend"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "Lamp (drag)"
+
+[node name="LegObj" type="Label" parent="UI/Legend"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "Object"
+
+[node name="LegDot" type="Label" parent="UI/Legend"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "Dots"
 
 [node name="Whisper" type="Label" parent="UI"]
 anchors_preset = 7
@@ -119,12 +166,12 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -320.0
+offset_left = -360.0
 offset_top = -78.0
-offset_right = 320.0
+offset_right = 360.0
 offset_bottom = -48.0
-theme_override_colors/font_color = Color(0.92, 0.88, 0.82, 0.55)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 0.85)
+theme_override_font_sizes/font_size = 15
 text = ""
 horizontal_alignment = 1
 autowrap_mode = 2

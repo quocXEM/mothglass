@@ -65,7 +65,7 @@ static func _r2() -> Dictionary:
 		"whisper": "Hai vật. Một đèn. Phủ hình phía dưới.",
 		"lamp": Vector2(80, 600),
 		"shadow_length": 340.0,
-		"threshold": 0.9,
+		"threshold": 0.85,
 		"rotatable": false,
 		"props": [
 			{"pos": Vector2(500, 340), "poly": _poly([Vector2(0, -70), Vector2(55, 45), Vector2(-55, 45)]), "sprite": "prop_wedge", "sprite_scale": Vector2(0.9, 0.9)},
@@ -74,10 +74,9 @@ static func _r2() -> Dictionary:
 		"target_samples": [
 			Vector2(640, 560), Vector2(610, 575), Vector2(670, 575), Vector2(640, 595),
 			Vector2(590, 555), Vector2(690, 555), Vector2(620, 600), Vector2(660, 600),
-			Vector2(600, 585), Vector2(680, 585),
 		],
 		"anti_samples": [
-			Vector2(640, 420), Vector2(560, 400), Vector2(720, 400), Vector2(640, 480),
+			Vector2(640, 420), Vector2(560, 400), Vector2(720, 400),
 		],
 		"target_outline": _poly([
 			Vector2(560, 540), Vector2(720, 540), Vector2(730, 620), Vector2(550, 620),

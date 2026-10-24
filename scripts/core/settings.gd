@@ -3,7 +3,7 @@ extends Node
 
 const PATH := "user://mothglass_settings.cfg"
 
-var language: String = "en"
+var language: String = "vi"
 var master_volume: float = 0.85
 var muted: bool = false
 
