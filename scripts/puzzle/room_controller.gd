@@ -43,6 +43,8 @@ var _threshold := 0.9
 var _rotatable := false
 var _whisper_shown := true
 var _paused := false
+var _solve_hold := 0.0
+const SOLVE_HOLD_SEC := 0.55
 
 
 func _ready() -> void:
@@ -128,6 +130,7 @@ func _roman(n: int) -> String:
 
 func _load_room(id: int) -> void:
 	_solved = false
+	_solve_hold = 0.0
 	_whisper_shown = true
 	win_panel.visible = false
 	for c in props_root.get_children():
@@ -302,8 +305,14 @@ func _rebuild_shadows() -> void:
 	if target_ghost.has_method("set_progress"):
 		target_ghost.set_progress(_coverage)
 
-	if not _solved and _coverage >= _threshold and float(result.bad) <= 0.25:
-		_on_solved()
+	# Must hold the match — không thắng khi kéo lướt qua túi hẹp
+	var matching := (not _solved) and _coverage >= _threshold and float(result.bad) <= 0.25
+	if matching:
+		_solve_hold += get_process_delta_time()
+		if _solve_hold >= SOLVE_HOLD_SEC:
+			_on_solved()
+	else:
+		_solve_hold = 0.0
 
 
 func _draw_soft_shadow(sh: PackedVector2Array) -> void:
