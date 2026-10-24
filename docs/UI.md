@@ -1,27 +1,29 @@
 # UI standard (international art-game)
 
-## Remove (prototype / tutorial chrome)
+Tone: Monument Valley / HER TREES / Gorogoa — **teach with light and space**, not HUD.
 
-| Element | Why |
+## In play (room)
+
+| Visible | Form |
 |---|---|
-| Legend (Lamp / Object / Dots) | Reads as debug; coach covers this once |
-| Always-on GOAL rule bar | Competes with the puzzle image |
-| “COVER THESE DOTS” stamp on field | Breaks immersion |
-| Loud ProgressBar + % text | Feels casual / HUD-heavy |
-| Constant coaching whispers | Noise; prefer silent visual feedback |
-| Stacked menu CTAs of equal weight | Unclear hierarchy |
+| Roman numeral | Center top, quiet |
+| Room title | Tiny subtitle, fades after ~2s |
+| Menu / Again | Ghost text, no paper buttons |
+| Ink line | 1px hairline at bottom |
+| Target | Soft silhouette + glowing motes |
+| Forbidden | Cold void rings (never red ✕) |
+| Lamp | Soft circular glow, world object |
+| Coach | One modal, once per save |
 
-## Keep / redesign
+## Never in play
 
-| Element | Form |
-|---|---|
-| First-run coach | One modal, once |
-| Top chrome | Title · room numeral · Menu / Again (quiet) |
-| Progress | Thin ink line, no numbers |
-| Feedback | Dots fill + soft whisper only when holding / error |
-| Win / Pause | Small centered card |
-| Main menu | Brand + one primary CTA; secondary links |
+- Legend / GOAL bar / COVER stamp
+- ProgressBar + percentage
+- Constant coaching whispers
+- Dashed debug boxes
+- Red X markers
+- Equal-weight menu button stacks
 
-## Reference tone
+## Menus
 
-Monument Valley / HER TREES / Gorogoa: **teach with the world**, not with HUD.
+Brand hero + one primary **Enter**; Chambers / Settings / Credits as secondary links.
