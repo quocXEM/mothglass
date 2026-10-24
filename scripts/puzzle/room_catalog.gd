@@ -49,9 +49,8 @@ static func _r1() -> Dictionary:
 			Vector2(720, 360), Vector2(760, 360), Vector2(800, 360), Vector2(840, 360),
 			Vector2(740, 400), Vector2(780, 400), Vector2(820, 400), Vector2(860, 400),
 		],
-		"anti_samples": [
-			Vector2(520, 200), Vector2(520, 560), Vector2(300, 380),
-		],
+		# Phòng dạy — không dùng ✕ phạt (tránh báo sai khi chơi đúng)
+		"anti_samples": [],
 		"target_outline": _poly([
 			Vector2(700, 330), Vector2(880, 330), Vector2(880, 430), Vector2(700, 430),
 		]),

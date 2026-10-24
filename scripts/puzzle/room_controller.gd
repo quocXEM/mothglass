@@ -52,6 +52,8 @@ const SOLVE_HOLD_SEC := 0.7
 var _rays: Node2D
 var _stage: Polygon2D
 var _last_bad := 0.0
+var _dots_ok := 0
+var _dots_total := 0
 
 
 func _ready() -> void:
@@ -323,6 +325,8 @@ func _rebuild_shadows() -> void:
 	_draw_rays(lamp_pos)
 
 	var flags: Array = []
+	_dots_ok = 0
+	_dots_total = _samples.size()
 	for s in _samples:
 		var ok := false
 		for sh in shadow_polys:
@@ -330,6 +334,8 @@ func _rebuild_shadows() -> void:
 				ok = true
 				break
 		flags.append(ok)
+		if ok:
+			_dots_ok += 1
 	var aflags: Array = []
 	for s in _anti:
 		var ok := false
@@ -359,18 +365,19 @@ func _rebuild_shadows() -> void:
 
 func _update_feedback() -> void:
 	whisper_l.modulate.a = 0.9
-	var key := "hint.low"
-	if _last_bad > 0.25:
-		key = "hint.anti"
+	# Anti only if room actually has forbidden marks
+	if _anti.size() > 0 and _last_bad > 0.25:
+		whisper_l.text = Loc.tr_key("hint.anti")
 	elif _solve_hold > 0.05:
-		key = "hint.hold"
-	elif _coverage >= 0.75:
-		key = "hint.high"
-	elif _coverage >= 0.35:
-		key = "hint.mid"
-	elif _coverage < 0.08:
-		key = "hint.goal" if GameState.current_room <= 2 else "hint.low"
-	whisper_l.text = Loc.tr_key(key)
+		whisper_l.text = Loc.tr_key("hint.hold")
+	elif _dots_total > 0 and _dots_ok > 0:
+		whisper_l.text = Loc.tr_key("hint.cover") % [_dots_ok, _dots_total]
+		if _coverage >= 0.75:
+			whisper_l.text += "  —  " + Loc.tr_key("hint.high")
+	elif GameState.current_room <= 2:
+		whisper_l.text = Loc.tr_key("hint.goal")
+	else:
+		whisper_l.text = Loc.tr_key("hint.low")
 	if target_ghost.has_method("set_status"):
 		target_ghost.set_status(Loc.tr_key("zone.fill"))
 
