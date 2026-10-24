@@ -36,16 +36,16 @@ shape = SubResource("CircleShape2D_lamp")
 
 [node name="Glow" type="Polygon2D" parent="World/Lamp"]
 z_index = -1
-color = Color(1, 0.88, 0.55, 0.14)
-polygon = PackedVector2Array(-70, 0, -35, -60, 35, -60, 70, 0, 35, 60, -35, 60)
+color = Color(1, 0.9, 0.65, 0.08)
+polygon = PackedVector2Array(-8, -48, 8, -48, 28, -28, 48, -8, 48, 8, 28, 28, 8, 48, -8, 48, -28, 28, -48, 8, -48, -8, -28, -28)
 
 [node name="LampHint" type="Label" parent="World/Lamp"]
-offset_left = -40.0
-offset_top = 52.0
-offset_right = 40.0
-offset_bottom = 72.0
-theme_override_colors/font_color = Color(0.92, 0.88, 0.8, 0.55)
-theme_override_font_sizes/font_size = 12
+offset_left = -48.0
+offset_top = 48.0
+offset_right = 48.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.8, 0.4)
+theme_override_font_sizes/font_size = 11
 text = ""
 horizontal_alignment = 1
 
@@ -55,62 +55,74 @@ z_index = 8
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Top" type="HBoxContainer" parent="UI"]
-offset_left = 24.0
-offset_top = 20.0
-offset_right = 280.0
-offset_bottom = 52.0
-theme_override_constants/separation = 12
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 200.0
+offset_bottom = 44.0
+theme_override_constants/separation = 16
 
 [node name="BtnBack" type="Button" parent="UI/Top"]
-custom_minimum_size = Vector2(72, 32)
+custom_minimum_size = Vector2(56, 28)
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+focus_mode = 0
+flat = true
+theme_type_variation = &"GhostButton"
+theme_override_colors/font_color = Color(0.92, 0.88, 0.82, 0.4)
+theme_override_colors/font_hover_color = Color(0.96, 0.93, 0.88, 0.85)
+theme_override_colors/font_pressed_color = Color(0.96, 0.93, 0.88, 0.7)
+theme_override_font_sizes/font_size = 14
 text = "Menu"
 
 [node name="BtnRetry" type="Button" parent="UI/Top"]
-custom_minimum_size = Vector2(72, 32)
+custom_minimum_size = Vector2(56, 28)
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+focus_mode = 0
+flat = true
+theme_type_variation = &"GhostButton"
+theme_override_colors/font_color = Color(0.92, 0.88, 0.82, 0.4)
+theme_override_colors/font_hover_color = Color(0.96, 0.93, 0.88, 0.85)
+theme_override_colors/font_pressed_color = Color(0.96, 0.93, 0.88, 0.7)
+theme_override_font_sizes/font_size = 14
 text = "Again"
+
+[node name="Badge" type="Label" parent="UI"]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = 18.0
+offset_right = 40.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.94, 0.9, 0.84, 0.55)
+theme_override_font_sizes/font_size = 26
+text = "I"
+horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="UI"]
 anchors_preset = 10
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -220.0
-offset_top = 18.0
-offset_right = 220.0
-offset_bottom = 52.0
-theme_override_colors/font_color = Color(0.96, 0.93, 0.88, 0.95)
-theme_override_font_sizes/font_size = 28
-text = "Mothglass"
-horizontal_alignment = 1
-
-[node name="Badge" type="Label" parent="UI"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -80.0
-offset_top = 22.0
-offset_right = -28.0
-offset_bottom = 48.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.45)
+offset_left = -200.0
+offset_top = 48.0
+offset_right = 200.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.94, 0.9, 0.84, 0.35)
 theme_override_font_sizes/font_size = 14
-text = "I"
-horizontal_alignment = 2
+text = ""
+horizontal_alignment = 1
 
 [node name="RotateHint" type="Label" parent="UI"]
 visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -100.0
-offset_top = 48.0
-offset_right = -28.0
-offset_bottom = 68.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.35)
+offset_left = -88.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.28)
 theme_override_font_sizes/font_size = 12
-text = "Q  E"
+text = "Q · E"
 horizontal_alignment = 2
 
 [node name="Whisper" type="Label" parent="UI"]
@@ -119,12 +131,12 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -56.0
-offset_right = 280.0
-offset_bottom = -32.0
-theme_override_colors/font_color = Color(0.94, 0.9, 0.84, 0.55)
-theme_override_font_sizes/font_size = 14
+offset_left = -240.0
+offset_top = -48.0
+offset_right = 240.0
+offset_bottom = -28.0
+theme_override_colors/font_color = Color(0.94, 0.9, 0.84, 0.4)
+theme_override_font_sizes/font_size = 13
 text = ""
 horizontal_alignment = 1
 autowrap_mode = 2
@@ -136,11 +148,11 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -22.0
-offset_right = 64.0
-offset_bottom = -20.0
-color = Color(0.95, 0.9, 0.82, 0.12)
+offset_left = -48.0
+offset_top = -18.0
+offset_right = 48.0
+offset_bottom = -17.0
+color = Color(0.95, 0.9, 0.82, 0.1)
 
 [node name="InkFill" type="ColorRect" parent="UI"]
 unique_name_in_owner = true
@@ -149,11 +161,11 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -22.0
-offset_right = -64.0
-offset_bottom = -20.0
-color = Color(0.95, 0.9, 0.82, 0.55)
+offset_left = -48.0
+offset_top = -18.0
+offset_right = -48.0
+offset_bottom = -17.0
+color = Color(0.95, 0.9, 0.82, 0.5)
 
 [node name="Win" type="PanelContainer" parent="UI"]
 visible = false
@@ -162,26 +174,26 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = 100.0
+offset_left = -140.0
+offset_top = -90.0
+offset_right = 140.0
+offset_bottom = 90.0
 
 [node name="VBox" type="VBoxContainer" parent="UI/Win"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 alignment = 1
 
 [node name="WinTitle" type="Label" parent="UI/Win/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 26
 text = "Remembered"
 horizontal_alignment = 1
 
 [node name="WinBody" type="Label" parent="UI/Win/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.3, 0.26, 0.22, 0.8)
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.3, 0.26, 0.22, 0.75)
 text = "The shadow holds."
 horizontal_alignment = 1
 
@@ -192,6 +204,8 @@ text = "Continue"
 
 [node name="BtnMenu" type="Button" parent="UI/Win/VBox"]
 layout_mode = 2
+flat = true
+theme_type_variation = &"GhostButton"
 text = "Menu"
 
 [node name="Pause" type="PanelContainer" parent="UI"]
@@ -201,10 +215,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -130.0
-offset_top = -70.0
-offset_right = 130.0
-offset_bottom = 70.0
+offset_left = -120.0
+offset_top = -64.0
+offset_right = 120.0
+offset_bottom = 64.0
 
 [node name="VBox" type="VBoxContainer" parent="UI/Pause"]
 layout_mode = 2
@@ -213,7 +227,7 @@ alignment = 1
 
 [node name="PauseTitle" type="Label" parent="UI/Pause/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 20
 text = "Paused"
 horizontal_alignment = 1
 

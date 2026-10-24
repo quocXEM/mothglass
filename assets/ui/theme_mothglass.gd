@@ -55,10 +55,26 @@ func _build() -> Theme:
 	elif font_reg:
 		theme.set_font("font", "Button", font_reg)
 
-	# Labels
+	# GhostButton — in-world chrome (Menu / Again), no paper plate
+	var ghost := StyleBoxEmpty.new()
+	theme.set_type_variation("GhostButton", "Button")
+	theme.set_stylebox("normal", "GhostButton", ghost)
+	theme.set_stylebox("hover", "GhostButton", ghost)
+	theme.set_stylebox("pressed", "GhostButton", ghost)
+	theme.set_stylebox("focus", "GhostButton", ghost)
+	theme.set_color("font_color", "GhostButton", Color(0.92, 0.88, 0.82, 0.42))
+	theme.set_color("font_hover_color", "GhostButton", Color(0.96, 0.93, 0.88, 0.9))
+	theme.set_color("font_pressed_color", "GhostButton", Color(0.96, 0.93, 0.88, 0.65))
+	theme.set_font_size("font_size", "GhostButton", 14)
+	if font_reg:
+		theme.set_font("font", "GhostButton", font_reg)
+
+	# Labels — display serif for titles feel
 	theme.set_color("font_color", "Label", ink)
 	theme.set_font_size("font_size", "Label", 16)
-	if font_body:
+	if font_reg:
+		theme.set_font("font", "Label", font_reg)
+	elif font_body:
 		theme.set_font("font", "Label", font_body)
 
 	# Panels

@@ -50,6 +50,7 @@ var _stage: Polygon2D
 var _last_bad := 0.0
 var _dots_ok := 0
 var _dots_total := 0
+var _title_fade_t := 0.0
 
 
 func _ready() -> void:
@@ -93,6 +94,7 @@ func _refresh_chrome() -> void:
 	if GameState.current_room >= 1:
 		title_l.text = Loc.room_title(GameState.current_room)
 		whisper_l.text = ""
+		whisper_l.modulate.a = 0.0
 
 
 func _tex(name: String) -> Texture2D:
@@ -125,13 +127,13 @@ func _setup_art() -> void:
 		vignette.position = Vector2.ZERO
 		vignette.modulate = Color(1, 1, 1, 0.95)
 
-	# Puzzle stage — separates play area from background moth decoration
+	# Soft floor wash — not a hard “stage box”
 	if _stage == null:
 		_stage = Polygon2D.new()
 		_stage.z_index = -2
-		_stage.color = Color(0.12, 0.1, 0.09, 0.45)
+		_stage.color = Color(0.06, 0.05, 0.04, 0.28)
 		_stage.polygon = PackedVector2Array([
-			Vector2(80, 120), Vector2(1200, 120), Vector2(1200, 660), Vector2(80, 660),
+			Vector2(40, 160), Vector2(1240, 160), Vector2(1200, 680), Vector2(80, 680),
 		])
 		$World.add_child(_stage)
 		$World.move_child(_stage, 1)
@@ -140,12 +142,21 @@ func _setup_art() -> void:
 		_rays.z_index = 0
 		$World.add_child(_rays)
 
+	# Soft circular glow behind lamp (not hex badge)
+	var glow: Polygon2D = $World/Lamp/Glow
+	var ring: PackedVector2Array = PackedVector2Array()
+	for i in 24:
+		var a := TAU * float(i) / 24.0
+		ring.append(Vector2(cos(a), sin(a)) * 56.0)
+	glow.polygon = ring
+	glow.color = Color(1.0, 0.88, 0.55, 0.1)
+
 	var lamp_tex := _tex("lamp.png")
 	if lamp_tex:
 		lamp_sprite.texture = lamp_tex
 		lamp_sprite.centered = true
-		lamp_sprite.scale = Vector2(0.2, 0.2)
-		lamp_sprite.modulate = Color(1, 1, 1, 0.98)
+		lamp_sprite.scale = Vector2(0.18, 0.18)
+		lamp_sprite.modulate = Color(1, 0.98, 0.92, 1)
 
 
 func _roman(n: int) -> String:
@@ -164,10 +175,12 @@ func _load_room(id: int) -> void:
 		c.queue_free()
 
 	var data: Dictionary = RoomCatalog.get_room(id)
-	title_l.text = Loc.room_title(id)
-	whisper_l.text = Loc.room_whisper(id)
-	whisper_l.modulate.a = 0.7
 	badge.text = _roman(id)
+	title_l.text = Loc.room_title(id)
+	title_l.modulate.a = 1.0
+	_title_fade_t = 0.0
+	whisper_l.text = ""
+	whisper_l.modulate.a = 0.0
 	_refresh_chrome()
 	lamp.position = data.lamp
 	_samples = data.target_samples
@@ -176,6 +189,7 @@ func _load_room(id: int) -> void:
 	_threshold = float(data.get("threshold", 0.9))
 	_rotatable = bool(data.get("rotatable", false))
 	rotate_hint.visible = _rotatable
+	rotate_hint.modulate.a = 0.55 if _rotatable else 0.0
 
 	var outlines: Array = [data.target_outline]
 	if data.has("target_outline_b"):
@@ -203,10 +217,9 @@ func _load_room(id: int) -> void:
 			poly.polygon = p.poly
 			poly.color = Color(0.28, 0.24, 0.2, 1)
 			holder.add_child(poly)
-		# Bright rim so props don't vanish into background
 		var rim := Line2D.new()
-		rim.width = 3.0
-		rim.default_color = Color(0.95, 0.88, 0.7, 0.75)
+		rim.width = 1.5
+		rim.default_color = Color(0.92, 0.86, 0.72, 0.35)
 		rim.closed = true
 		for pt in p.poly:
 			rim.add_point(pt)
@@ -278,6 +291,14 @@ func _toggle_pause() -> void:
 func _process(delta: float) -> void:
 	if _paused:
 		return
+	# Title whispers once then leaves only the roman numeral
+	_title_fade_t += delta
+	if _title_fade_t > 2.2:
+		title_l.modulate.a = maxf(0.0, title_l.modulate.a - delta * 0.7)
+	if _rotatable and rotate_hint.visible and _title_fade_t > 5.0:
+		rotate_hint.modulate.a = maxf(0.0, rotate_hint.modulate.a - delta * 0.4)
+		if rotate_hint.modulate.a <= 0.02:
+			rotate_hint.visible = false
 	_hint_pulse += delta * 2.4
 	if not _dragging and not _solved:
 		var s := 1.0 + 0.035 * sin(_hint_pulse)
@@ -361,21 +382,18 @@ func _rebuild_shadows() -> void:
 
 
 func _set_ink(t: float) -> void:
-	var full := 128.0
+	var full := 96.0
 	var w := full * clampf(t, 0.0, 1.0)
-	ink_fill.offset_left = -64.0
-	ink_fill.offset_right = -64.0 + w
-	ink_fill.modulate.a = lerpf(0.35, 0.9, t)
+	ink_fill.offset_left = -48.0
+	ink_fill.offset_right = -48.0 + w
+	ink_fill.modulate.a = lerpf(0.25, 0.85, t)
 
 
 func _update_feedback() -> void:
-	# Quiet: only speak on error or hold — dots/ink teach the rest
+	# Almost silent — only a soft note when shadow hits a void
 	if _anti.size() > 0 and _last_bad > 0.25:
 		whisper_l.text = Loc.tr_key("hint.anti")
-		whisper_l.modulate.a = 0.75
-	elif _solve_hold > 0.05:
-		whisper_l.text = Loc.tr_key("hint.hold")
-		whisper_l.modulate.a = 0.7
+		whisper_l.modulate.a = 0.45
 	else:
 		whisper_l.text = ""
 		whisper_l.modulate.a = 0.0
@@ -391,8 +409,8 @@ func _draw_rays(lamp_pos: Vector2) -> void:
 	for item in _prop_data:
 		var node: Node2D = item.node
 		var line := Line2D.new()
-		line.width = 1.5
-		line.default_color = Color(1.0, 0.9, 0.55, 0.18)
+		line.width = 1.0
+		line.default_color = Color(1.0, 0.9, 0.55, 0.1)
 		line.add_point(_rays.to_local(lamp_pos))
 		line.add_point(_rays.to_local(node.global_position))
 		_rays.add_child(line)
