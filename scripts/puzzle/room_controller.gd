@@ -3,6 +3,7 @@ extends Node2D
 signal solved
 
 const ART := "res://assets/art/"
+const STYLED := "res://assets/art/styled/"
 
 @onready var lamp: Area2D = $World/Lamp
 @onready var lamp_hint: Label = $World/Lamp/LampHint
@@ -23,7 +24,6 @@ const ART := "res://assets/art/"
 @onready var win_panel: PanelContainer = $UI/Win
 @onready var btn_next: Button = $UI/Win/VBox/BtnNext
 @onready var btn_menu: Button = $UI/Win/VBox/BtnMenu
-@onready var how_to: PanelContainer = $UI/HowTo
 
 var _dragging := false
 var _drag_off := Vector2.ZERO
@@ -36,6 +36,7 @@ var _hint_pulse := 0.0
 var _shadow_len := 320.0
 var _threshold := 0.9
 var _rotatable := false
+var _whisper_shown := true
 
 
 func _ready() -> void:
@@ -47,10 +48,21 @@ func _ready() -> void:
 	lamp.input_event.connect(_on_lamp_input)
 	_setup_art()
 	_load_room(GameState.current_room)
+	modulate.a = 0.0
+	create_tween().tween_property(self, "modulate:a", 1.0, 0.55)
+
+
+func _tex(name: String) -> Texture2D:
+	var styled := STYLED + name
+	var raw := ART + name
+	if ResourceLoader.exists(styled):
+		return load(styled)
+	if ResourceLoader.exists(raw):
+		return load(raw)
+	return null
 
 
 func _setup_art() -> void:
-	# Prefer dream atmosphere photo+paint, fallback Blender hall
 	var dream := ART + "bg_dream.jpg"
 	var hall := ART + "bg_room.png"
 	if ResourceLoader.exists(dream):
@@ -59,30 +71,33 @@ func _setup_art() -> void:
 		bg.texture = load(hall)
 	bg.centered = false
 	bg.position = Vector2.ZERO
-	bg.scale = Vector2(1280.0 / maxf(bg.texture.get_width(), 1), 720.0 / maxf(bg.texture.get_height(), 1))
-	bg.modulate = Color(1, 1, 1, 0.92)
+	if bg.texture:
+		bg.scale = Vector2(1280.0 / float(bg.texture.get_width()), 720.0 / float(bg.texture.get_height()))
+	bg.modulate = Color(0.92, 0.9, 0.86, 1)
 
 	if ResourceLoader.exists(ART + "vignette.png"):
 		vignette.texture = load(ART + "vignette.png")
 		vignette.centered = false
 		vignette.position = Vector2.ZERO
-		vignette.modulate = Color(1, 1, 1, 0.85)
+		vignette.modulate = Color(1, 1, 1, 0.9)
 
-	if ResourceLoader.exists(ART + "lamp.png"):
-		lamp_sprite.texture = load(ART + "lamp.png")
+	var lamp_tex := _tex("lamp.png")
+	if lamp_tex:
+		lamp_sprite.texture = lamp_tex
 		lamp_sprite.centered = true
-		lamp_sprite.scale = Vector2(0.22, 0.22)
-		# Hide procedural shapes if sprite present
-		for n in ["Halo", "Body", "Glass", "Flame", "Base"]:
-			var node := lamp.get_node_or_null(n)
-			if node:
-				node.visible = false
+		lamp_sprite.scale = Vector2(0.2, 0.2)
+		lamp_sprite.modulate = Color(1, 1, 1, 0.98)
+
+
+func _roman(n: int) -> String:
+	var map := {1: "I", 2: "II", 3: "III", 4: "IV", 5: "V"}
+	return str(map.get(n, str(n)))
 
 
 func _load_room(id: int) -> void:
 	_solved = false
+	_whisper_shown = true
 	win_panel.visible = false
-	how_to.visible = id <= 2
 	for c in props_root.get_children():
 		c.queue_free()
 	for c in shadows.get_children():
@@ -90,8 +105,10 @@ func _load_room(id: int) -> void:
 
 	var data: Dictionary = RoomCatalog.get_room(id)
 	title_l.text = RoomCatalog.title(id)
+	# Short whisper only; fades after first drag
 	whisper_l.text = RoomCatalog.whisper(id)
-	badge.text = "Phòng %d / %d · Khó" % [id, GameState.TOTAL_ROOMS]
+	whisper_l.modulate.a = 0.7
+	badge.text = _roman(id)
 	lamp.position = data.lamp
 	_samples = data.target_samples
 	_anti = data.get("anti_samples", [])
@@ -99,7 +116,6 @@ func _load_room(id: int) -> void:
 	_threshold = float(data.get("threshold", 0.9))
 	_rotatable = bool(data.get("rotatable", false))
 	rotate_hint.visible = _rotatable
-	rotate_hint.text = "Q / E — xoay vật" if _rotatable else ""
 
 	var outlines: Array = [data.target_outline]
 	if data.has("target_outline_b"):
@@ -114,20 +130,20 @@ func _load_room(id: int) -> void:
 		props_root.add_child(holder)
 
 		var sprite_name: String = str(p.get("sprite", ""))
-		var tex_path := ART + sprite_name + ".png"
-		if sprite_name != "" and ResourceLoader.exists(tex_path):
+		var tex := _tex(sprite_name + ".png") if sprite_name != "" else null
+		if tex:
 			var spr := Sprite2D.new()
-			spr.texture = load(tex_path)
+			spr.texture = tex
 			spr.centered = true
 			spr.scale = p.get("sprite_scale", Vector2(0.7, 0.7))
+			spr.modulate = Color(0.95, 0.92, 0.88, 0.95)
 			holder.add_child(spr)
 		else:
 			var poly := Polygon2D.new()
 			poly.polygon = p.poly
-			poly.color = Color(0.32, 0.26, 0.2, 1)
+			poly.color = Color(0.22, 0.18, 0.15, 0.92)
 			holder.add_child(poly)
 
-		# Invisible collision poly kept for shadow math
 		_prop_data.append({
 			"node": holder,
 			"local": p.poly,
@@ -144,7 +160,9 @@ func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
 			_dragging = true
 			_drag_off = lamp.global_position - get_global_mouse_position()
 			lamp_hint.visible = false
-			how_to.visible = false
+			if _whisper_shown:
+				_whisper_shown = false
+				create_tween().tween_property(whisper_l, "modulate:a", 0.0, 0.8)
 			AudioBus.play_soft()
 		else:
 			_dragging = false
@@ -178,12 +196,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
-	_hint_pulse += delta * 3.0
+	_hint_pulse += delta * 2.4
 	if not _dragging and not _solved:
-		var s := 1.0 + 0.05 * sin(_hint_pulse)
+		var s := 1.0 + 0.035 * sin(_hint_pulse)
 		lamp.scale = Vector2(s, s)
 		lamp_hint.visible = true
-		lamp_hint.modulate.a = 0.55 + 0.45 * absf(sin(_hint_pulse))
+		lamp_hint.modulate.a = 0.35 + 0.35 * absf(sin(_hint_pulse))
 	else:
 		lamp.scale = Vector2.ONE
 
@@ -208,17 +226,12 @@ func _rebuild_shadows() -> void:
 			global_poly.append(node.to_global(pt))
 		var sh := ShadowMath.cast_shadow(global_poly, lamp_pos, _shadow_len)
 		shadow_polys.append(sh)
-		var draw := Polygon2D.new()
-		draw.polygon = _to_local_poly(sh)
-		draw.color = Color(0.08, 0.09, 0.14, 0.58)
-		shadows.add_child(draw)
+		_draw_soft_shadow(sh)
 
 	var result: Dictionary = ShadowMath.solve_score(_samples, _anti, shadow_polys)
 	_coverage = float(result.score)
 	progress.value = _coverage * 100.0
-	progress_label.text = "Khớp bóng: %d%%  ·  phạt %d%%" % [
-		int(float(result.good) * 100.0), int(float(result.bad) * 100.0)
-	]
+	progress.modulate.a = lerpf(0.25, 0.85, _coverage)
 
 	var flags: Array = []
 	for s in _samples:
@@ -245,23 +258,37 @@ func _rebuild_shadows() -> void:
 		_on_solved()
 
 
-func _to_local_poly(global_poly: PackedVector2Array) -> PackedVector2Array:
-	var out := PackedVector2Array()
-	for p in global_poly:
-		out.append(shadows.to_local(p))
-	return out
+func _draw_soft_shadow(sh: PackedVector2Array) -> void:
+	# Layered translucent polys = soft ink shadow without debug edges
+	var layers := [
+		{"scale": 1.06, "a": 0.1, "off": Vector2(10, 8)},
+		{"scale": 1.02, "a": 0.16, "off": Vector2(5, 4)},
+		{"scale": 1.0, "a": 0.34, "off": Vector2.ZERO},
+	]
+	var center := Vector2.ZERO
+	for p in sh:
+		center += p
+	center /= float(maxi(sh.size(), 1))
+	for layer in layers:
+		var poly := PackedVector2Array()
+		for p in sh:
+			var q: Vector2 = center + (p - center) * float(layer.scale) + layer.off
+			poly.append(shadows.to_local(q))
+		var draw := Polygon2D.new()
+		draw.polygon = poly
+		draw.color = Color(0.06, 0.05, 0.07, float(layer.a))
+		shadows.add_child(draw)
 
 
 func _on_solved() -> void:
 	_solved = true
 	_dragging = false
 	lamp_hint.visible = false
-	how_to.visible = false
 	AudioBus.play_solve()
 	GameState.mark_done(GameState.current_room)
 	win_panel.visible = true
 	win_panel.modulate.a = 0.0
-	create_tween().tween_property(win_panel, "modulate:a", 1.0, 0.45)
+	create_tween().tween_property(win_panel, "modulate:a", 1.0, 0.55)
 	solved.emit()
 
 

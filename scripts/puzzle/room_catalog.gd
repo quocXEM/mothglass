@@ -37,7 +37,7 @@ static func _r1() -> Dictionary:
 	# Hai cột — bóng phải phủ CẢ vùng trên lẫn dưới (túi đèn hẹp).
 	return {
 		"title": "Hai đảo bóng",
-		"whisper": "Một đèn. Hai vùng đỏ. Bóng phải tô cả hai cùng lúc — túi vị trí rất hẹp.",
+		"whisper": "Một bóng. Hai khoảng nhớ.",
 		"lamp": Vector2(1100, 80),
 		"shadow_length": 280.0,
 		"threshold": 0.9,
@@ -66,7 +66,7 @@ static func _r1() -> Dictionary:
 static func _r2() -> Dictionary:
 	return {
 		"title": "Góc hẹp",
-		"whisper": "Hai nêm. Kéo đèn vào một điểm rất nhỏ phía trên giữa — bóng mới chạm cả chùm chấm dưới.",
+		"whisper": "Góc hẹp hơn bạn nghĩ.",
 		"lamp": Vector2(80, 600),
 		"shadow_length": 340.0,
 		"threshold": 0.92,
@@ -92,7 +92,7 @@ static func _r2() -> Dictionary:
 static func _r3() -> Dictionary:
 	return {
 		"title": "Xoay khối nhớ",
-		"whisper": "Giữ Q / E để xoay khối. Đèn + góc xoay phải khớp — chỉ một vài góc đúng.",
+		"whisper": "Xoay. Rồi đặt đèn.",
 		"lamp": Vector2(1100, 100),
 		"shadow_length": 300.0,
 		"threshold": 0.92,
@@ -117,7 +117,7 @@ static func _r3() -> Dictionary:
 static func _r4() -> Dictionary:
 	return {
 		"title": "Cổng lệch",
-		"whisper": "Cổng lệch pha. Đèn phải ở góc phải-trên hẹp; bóng xuyên ngưỡng dưới mà không nuốt vùng phạt.",
+		"whisper": "Cổng không thẳng với mắt.",
 		"lamp": Vector2(100, 600),
 		"shadow_length": 360.0,
 		"threshold": 0.9,
@@ -145,7 +145,7 @@ static func _r5() -> Dictionary:
 	# Đèn gần đỉnh lệch trái; bóng thân phủ cột chấm dưới — túi hẹp + xoay cánh tinh.
 	return {
 		"title": "Bướm kính",
-		"whisper": "Đèn lệch khỏi giữa. Xoay cánh (Q/E) tới khi bóng thân phủ hết cột chấm dưới — tránh X.",
+		"whisper": "Đối xứng gần đúng vẫn sai.",
 		"lamp": Vector2(80, 80),
 		"shadow_length": 360.0,
 		"threshold": 0.92,
