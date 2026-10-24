@@ -49,7 +49,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.35, 0.33, 0.3, 1)
 theme_override_font_sizes/font_size = 17
-text = "Xếp đèn trong giấc mơ — để bóng nhớ lại một hình"
+text = "Kéo đèn → bóng đen phủ vùng đỏ = thắng"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -61,8 +61,39 @@ theme_override_font_sizes/font_size = 14
 text = "Phòng mở khóa: 1 / 5"
 horizontal_alignment = 1
 
+[node name="HowCard" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="HowInner" type="VBoxContainer" parent="VBox/HowCard"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="H0" type="Label" parent="VBox/HowCard/HowInner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Trong game bạn sẽ thấy:"
+horizontal_alignment = 1
+
+[node name="H1" type="Label" parent="VBox/HowCard/HowInner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "🟡 Đèn — kéo được"
+horizontal_alignment = 1
+
+[node name="H2" type="Label" parent="VBox/HowCard/HowInner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "🟫 Vật — đứng yên, tạo bóng"
+horizontal_alignment = 1
+
+[node name="H3" type="Label" parent="VBox/HowCard/HowInner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "🟥 Vùng sọc + chấm — cần bóng phủ"
+horizontal_alignment = 1
+
 [node name="Gap" type="Control" parent="VBox"]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [node name="PlayBtn" type="Button" parent="VBox"]
@@ -70,7 +101,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Vào giấc mơ"
+text = "Chơi phòng 1"
 
 [node name="QuitBtn" type="Button" parent="VBox"]
 unique_name_in_owner = true
@@ -82,6 +113,6 @@ text = "Thoát"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.45, 0.4, 0.9)
 theme_override_font_sizes/font_size = 12
-text = "Cơ chế gốc: bóng đổ ghép thành silhouette — không chữ, không lưới, không 3D xoay."
+text = "Mục tiêu: kéo đèn đến khi mọi chấm đỏ chuyển xanh và thanh dưới đầy."
 horizontal_alignment = 1
 autowrap_mode = 2

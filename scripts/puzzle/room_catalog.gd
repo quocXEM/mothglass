@@ -38,7 +38,7 @@ static func _r1() -> Dictionary:
 	# Bóng cột + thanh ngang phủ silhouette chìa ở bên phải — đèn bắt đầu ở góc xa
 	return {
 		"title": "Đèn đầu tiên",
-		"whisper": "Kéo đèn. Để bóng nhớ lại một hình không có trên bàn.",
+		"whisper": "Kéo đèn vàng sang trái — bóng đen phải phủ hết vùng đỏ sọc.",
 		"lamp": Vector2(1000, 120),
 		"props": [
 			{"pos": Vector2(640, 420), "poly": _poly([Vector2(-18, -70), Vector2(18, -70), Vector2(22, 70), Vector2(-22, 70)])},
@@ -58,7 +58,7 @@ static func _r1() -> Dictionary:
 static func _r2() -> Dictionary:
 	return {
 		"title": "Hai bóng một cánh",
-		"whisper": "Hai vật. Một đèn. Bóng phải chạm nhau thành một cánh.",
+		"whisper": "Kéo đèn để hai bóng chồng thành một vùng ở dưới.",
 		"lamp": Vector2(200, 200),
 		"props": [
 			{"pos": Vector2(520, 380), "poly": _poly([Vector2(0, -60), Vector2(50, 40), Vector2(-50, 40)])},
@@ -78,7 +78,7 @@ static func _r2() -> Dictionary:
 static func _r3() -> Dictionary:
 	return {
 		"title": "Vòng nhớ",
-		"whisper": "Đèn ở ngoài vòng. Bóng phải tô kín vùng nhớ bên phải.",
+		"whisper": "Đặt đèn bên trái vật — bóng dài sang phải tô hết vùng đỏ.",
 		"lamp": Vector2(1100, 100),
 		"props": [
 			{"pos": Vector2(640, 360), "poly": _poly([
@@ -99,7 +99,7 @@ static func _r3() -> Dictionary:
 static func _r4() -> Dictionary:
 	return {
 		"title": "Chữ không chữ",
-		"whisper": "Không có bảng chữ. Chỉ có bóng tạo một cổng.",
+		"whisper": "Kéo đèn để bóng tạo cổng phủ vùng đỏ phía dưới.",
 		"lamp": Vector2(1100, 560),
 		"props": [
 			{"pos": Vector2(500, 400), "poly": _poly([Vector2(-14, -90), Vector2(14, -90), Vector2(14, 90), Vector2(-14, 90)])},
@@ -120,7 +120,7 @@ static func _r4() -> Dictionary:
 static func _r5() -> Dictionary:
 	return {
 		"title": "Bướm kính",
-		"whisper": "Hình cuối: đôi cánh chỉ hiện khi bóng đối xứng đủ.",
+		"whisper": "Kéo đèn phía trên — bóng đôi cánh phủ hết chấm đỏ.",
 		"lamp": Vector2(640, 120),
 		"props": [
 			{"pos": Vector2(520, 360), "poly": _poly([Vector2(-20, -40), Vector2(30, 0), Vector2(-20, 40), Vector2(-35, 0)])},
