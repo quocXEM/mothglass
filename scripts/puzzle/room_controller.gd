@@ -31,6 +31,7 @@ const STYLED := "res://assets/art/styled/"
 @onready var btn_resume: Button = $UI/Pause/VBox/BtnResume
 
 var _dragging := false
+var _lamp_hint_done := false
 var _drag_off := Vector2.ZERO
 var _prop_data: Array = []
 var _samples: Array = []
@@ -227,6 +228,7 @@ func _on_lamp_input(_viewport, event: InputEvent, _shape_idx: int) -> void:
 		if event.pressed:
 			_dragging = true
 			_drag_off = lamp.global_position - get_global_mouse_position()
+			_lamp_hint_done = true
 			lamp_hint.visible = false
 			AudioBus.play_soft()
 		else:
@@ -281,10 +283,14 @@ func _process(delta: float) -> void:
 	if not _dragging and not _solved:
 		var s := 1.0 + 0.035 * sin(_hint_pulse)
 		lamp.scale = Vector2(s, s)
-		lamp_hint.visible = true
-		lamp_hint.modulate.a = 0.35 + 0.35 * absf(sin(_hint_pulse))
+		if not _lamp_hint_done and GameState.current_room <= 2 and lamp_hint.text != "":
+			lamp_hint.visible = true
+			lamp_hint.modulate.a = 0.35 + 0.35 * absf(sin(_hint_pulse))
+		else:
+			lamp_hint.visible = false
 	else:
 		lamp.scale = Vector2.ONE
+		lamp_hint.visible = false
 
 	if _dragging and not _solved:
 		lamp.global_position = get_global_mouse_position() + _drag_off

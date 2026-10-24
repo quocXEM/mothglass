@@ -57,4 +57,3 @@ func _refresh() -> void:
 	settings_btn.text = Loc.tr_key("menu.settings")
 	credits_btn.text = Loc.tr_key("menu.credits")
 	quit_btn.text = Loc.tr_key("menu.leave")
-	# Hierarchy: one primary, quieter secondary row
